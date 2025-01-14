@@ -1,14 +1,44 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { signInWithEmailAndPassword } from 'firebase/auth';
+import { auth } from './firebase'; // Import Firebase auth instance
 
 function UserPage({ goBack }) {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
+
+  const handleLogin = async (e) => {
+    e.preventDefault(); // Prevent form submission reload
+    try {
+      await signInWithEmailAndPassword(auth, email, password);
+      alert('Login successful');
+      // Add logic here to redirect or perform actions after login
+    } catch (err) {
+      setError("Invalid Login"); // Display any errors
+    }
+  };
+
   return (
     <div className="portal">
       <h1>User Login</h1>
-      <form>
-        <input type="email" placeholder="Email" required />
-        <input type="password" placeholder="Password" required />
+      <form onSubmit={handleLogin}>
+        <input
+          type="email"
+          placeholder="Email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          required
+        />
+        <input
+          type="password"
+          placeholder="Password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          required
+        />
         <button type="submit">Log In</button>
       </form>
+      {error && <p className="error">{error}</p>} {/* Display login errors */}
       <button onClick={goBack}>Back to Home</button>
     </div>
   );

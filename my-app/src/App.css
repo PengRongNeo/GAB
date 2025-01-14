@@ -110,3 +110,73 @@ body {
 .portal form button:hover {
   background: #4a5cb8;
 }
+
+/* Fullscreen Layout */
+.transaction-history-fullscreen {
+  width: 100%;
+  height: 100vh;
+  padding: 20px;
+  box-sizing: border-box;
+  font-family: Arial, sans-serif;
+  overflow-y: auto;
+  background-color: #f4f4f4;
+}
+
+.transaction-history-fullscreen h1 {
+  text-align: center;
+  color: #333;
+  margin-bottom: 20px;
+}
+
+.date-filter {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.date-filter label {
+  margin-right: 10px;
+  font-size: 1.1em;
+}
+
+.date-filter input[type='date'] {
+  padding: 8px;
+  font-size: 1.1em;
+}
+
+.transactions-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.transaction-item {
+  background-color: #fff;
+  padding: 15px;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.transaction-header {
+  font-size: 1.2em;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.transaction-details {
+  margin-top: 10px;
+}
+
+.transaction-details ul {
+  list-style-type: none;
+  padding-left: 0;
+}
+
+.transaction-details li {
+  padding: 5px 0;
+  font-size: 1em;
+}
+
+.transaction-details strong {
+  color: #333;
+}

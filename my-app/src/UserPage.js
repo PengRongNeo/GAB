@@ -38,7 +38,6 @@ function UserPage({ goBack }) {
           wallet: 0,  // Initialize wallet balance as 0
           cart: [],  // Initialize cart as an empty list
           preorder: [],  // Initialize preorder as an empty list
-          createdAt: new Date(),
         });
 
     

@@ -55,11 +55,10 @@ function TransactionHistory() {
   const filterTransactionsByDateRange = (start, end) => {
     const startDate = new Date(start);
     const endDate = new Date(end);
-    const endDateInclusive = new Date(endDate.setHours(23, 59, 59, 999)); // Ensure the end date includes all times
-    endDateInclusive.setDate(endDateInclusive.getDate());
+
     const filtered = transactions.filter((transaction) => {
       const transactionDate = new Date(transaction.date.seconds * 1000); // Convert Firestore Timestamp to Date
-      return transactionDate >= startDate && transactionDate <= endDateInclusive;
+      return transactionDate >= startDate && transactionDate <= endDate;
     });
 
     setFilteredTransactions(filtered);

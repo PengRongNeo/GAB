@@ -4,7 +4,8 @@ import StaffPage from './StaffPage.js';
 import UserPage from './UserPage.js';
 import UserDash from './UserDash.js';  // Assuming you created UserDash
 import StaffDash from './StaffDash.js';  // Assuming you created StaffDash
-import Test from './{Test}.js';
+import TransactionHist from './TransactionHist.js';
+
 import './App.css'; // Importing CSS for styling
 
 function App() {
@@ -17,7 +18,7 @@ function App() {
            <div className="app">
            {view === 'home' && (
              <div className="home">
-               <h1 className="title">Welcome to <span>Mohammadiyah</span></h1>
+               <h1 className="title">Welcome to <br /><span>MWH Minimart</span></h1>
                <p className="subtitle">Choose your portal to log in or sign up:</p>
                <div className="button-group">
                  <button className="custom-button" onClick={() => setView('staff')}>
@@ -34,7 +35,7 @@ function App() {
            )}
            {view === 'staff' && <StaffPage goBack={() => setView('home')} />}
            {view === 'user' && <UserPage goBack={() => setView('home')} />}
-           {view === 'test' && <UserPage goBack={() => setView('home')} />}
+           {view === 'test' && <TransactionHist goBack={() => setView('home')} />}
          </div>
         } />
         
@@ -51,7 +52,7 @@ function App() {
         <Route path="/staff-dash" element={<StaffDash />} /> 
 
         {/* Test route */}
-        <Route path="/test" element={<{ur test page} />} /> 
+        <Route path="/test" element={<TransactionHist />} /> 
       </Routes>
     </Router>
   );

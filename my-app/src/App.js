@@ -1,7 +1,9 @@
 import logo from './logo.svg';
 import './App.css';
+import { Component } from 'react';
+import { getFirestore } from 'firebase/firestore/lite';
 
-function App() {
+class App extends Component() {
   return (
     <div className="App">
       <header className="App-header">

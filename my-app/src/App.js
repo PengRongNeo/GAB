@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import StaffPage from '/Users/santtoshmohan/GAB/my-app/src/StaffPage.js';
-import UserPage from '/Users/santtoshmohan/GAB/my-app/src/UserPage.js';
+import StaffPage from './StaffPage.js';
+import UserPage from './UserPage.js';
 import './App.css'; // Importing CSS for styling
 
 function App() {

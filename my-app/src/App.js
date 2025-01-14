@@ -1,25 +1,29 @@
-import logo from './logo.svg';
-import './App.css';
-import { Component } from 'react';
-import { getFirestore } from 'firebase/firestore/lite';
+import React, { useState } from 'react';
+import StaffPage from './StaffPage.js';
+import UserPage from './UserPage.js';
+import './App.css'; // Importing CSS for styling
 
-class App extends Component() {
+function App() {
+  const [view, setView] = useState('home');
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="app">
+      {view === 'home' && (
+        <div className="home">
+          <h1 className="title">Welcome to <span>Mohammadiyah</span></h1>
+          <p className="subtitle">Choose your portal to log in or sign up:</p>
+          <div className="button-group">
+            <button className="custom-button" onClick={() => setView('staff')}>
+              Staff Portal
+            </button>
+            <button className="custom-button" onClick={() => setView('user')}>
+              User Portal
+            </button>
+          </div>
+        </div>
+      )}
+      {view === 'staff' && <StaffPage goBack={() => setView('home')} />}
+      {view === 'user' && <UserPage goBack={() => setView('home')} />}
     </div>
   );
 }

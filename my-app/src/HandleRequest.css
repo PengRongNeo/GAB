@@ -1,0 +1,74 @@
+/* HandleRequest.css */
+
+.handle-request {
+    font-family: Arial, sans-serif;
+    margin: 20px;
+  }
+  
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+  
+  .header input {
+    padding: 10px;
+    font-size: 16px;
+    width: 300px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+  
+  .table-container {
+    overflow-x: auto;
+  }
+  
+  .request-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+  }
+  
+  .request-table th, .request-table td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+  }
+  
+  .request-table th {
+    background-color: #f4f4f4;
+    color: #333;
+  }
+  
+  .request-table tr:hover {
+    background-color: #f9f9f9;
+  }
+  
+  .request-table .status-select {
+    padding: 5px 10px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background-color: #fff;
+  }
+  
+  .status-unfulfilled {
+    color: red;
+  }
+  
+  .status-pending {
+    color: orange;
+  }
+  
+  .status-fulfilled {
+    color: green;
+  }
+  
+  .no-results {
+    text-align: center;
+    font-style: italic;
+    color: #666;
+    margin-top: 20px;
+  }
+  

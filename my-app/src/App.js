@@ -4,6 +4,7 @@ import StaffPage from './StaffPage.js';
 import UserPage from './UserPage.js';
 import UserDash from './UserDash.js';  // Assuming you created UserDash
 import StaffDash from './StaffDash.js';  // Assuming you created StaffDash
+import Test from './{Test}.js';
 import './App.css'; // Importing CSS for styling
 
 function App() {
@@ -25,11 +26,15 @@ function App() {
                  <button className="custom-button" onClick={() => setView('user')}>
                    User Portal
                  </button>
+                 <button className="custom-button" onClick={() => setView('test')}>
+                   Test Page
+                 </button>
                </div>
              </div>
            )}
            {view === 'staff' && <StaffPage goBack={() => setView('home')} />}
            {view === 'user' && <UserPage goBack={() => setView('home')} />}
+           {view === 'test' && <UserPage goBack={() => setView('home')} />}
          </div>
         } />
         
@@ -44,6 +49,9 @@ function App() {
         
         {/* StaffDash route */}
         <Route path="/staff-dash" element={<StaffDash />} /> 
+
+        {/* Test route */}
+        <Route path="/test" element={<{ur test page} />} /> 
       </Routes>
     </Router>
   );

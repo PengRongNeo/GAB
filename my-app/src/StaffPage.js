@@ -54,6 +54,7 @@ function StaffPage({ goBack }) {
 
   return (
     <div className="portal">
+<<<<<<< HEAD
       <h1>{isSignUp ? 'Staff Sign Up' : 'Staff Login'}</h1>
 
       {error && <p style={{ color: 'red' }}>{error}</p>}
@@ -77,6 +78,27 @@ function StaffPage({ goBack }) {
         <button type="submit" disabled={loading}>{loading ? 'Processing...' : isSignUp ? 'Sign Up' : 'Log In'}</button>
       </form>
 
+=======
+      <h1>Staff Login</h1>
+      <form onSubmit={handleLogin}>
+        <input
+          type="text"
+          placeholder="Staff ID"
+          value={staffId}
+          onChange={(e) => setStaffId(e.target.value)}
+          required
+        />
+        <input
+          type="password"
+          placeholder="Password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          required
+        />
+        <button type="submit">Log In</button>
+      </form>
+      {error && <p className="error">{error}</p>} {/* Display login errors */}
+>>>>>>> 28754a433e79c73721069d1a693501bf9d8a5a1d
       <button onClick={goBack}>Back to Home</button>
 
       <div className="toggle-signup">

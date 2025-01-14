@@ -40,6 +40,14 @@ function UserPage({ goBack }) {
       </form>
       {error && <p className="error">{error}</p>} {/* Display login errors */}
       <button onClick={goBack}>Back to Home</button>
+      
+      <div className="toggle-signup">
+        {isSignUp ? (
+          <p>Already have an account? <span onClick={() => setIsSignUp(false)} style={{ color: 'blue', cursor: 'pointer' }}>Log in here</span></p>
+        ) : (
+          <p>Don't have an account? <span onClick={() => setIsSignUp(true)} style={{ color: 'blue', cursor: 'pointer' }}>Sign up here</span></p>
+        )}
+      </div>
     </div>
   );
 }

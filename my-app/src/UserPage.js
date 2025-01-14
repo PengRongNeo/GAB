@@ -27,10 +27,11 @@ function UserPage({ goBack }) {
         const userCredential = await createUserWithEmailAndPassword(auth, email, password);
         const user = userCredential.user;
 
-        // Store user info in Firestore
+        // Store user info in Firestore with password in plaintext (NOT RECOMMENDED)
         await setDoc(doc(db, 'users', user.uid), {
           email: user.email,
           createdAt: new Date(),
+          vouchers: [],  // Initialize vouchers as an empty list
         });
 
         alert('Sign up successful!');
@@ -52,7 +53,6 @@ function UserPage({ goBack }) {
 
   return (
     <div className="portal">
-<<<<<<< HEAD
       <h1>{isSignUp ? 'Sign Up' : 'User Login'}</h1>
 
       {error && <p style={{ color: 'red' }}>{error}</p>}
@@ -62,33 +62,20 @@ function UserPage({ goBack }) {
         <input type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} required />
         
         {isSignUp && (
-          <input type="password" placeholder="Confirm Password" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} required />
+          <input 
+            type="password" 
+            placeholder="Confirm Password" 
+            value={confirmPassword} 
+            onChange={(e) => setConfirmPassword(e.target.value)} 
+            required 
+          />
         )}
 
-        <button type="submit" disabled={loading}>{loading ? 'Processing...' : isSignUp ? 'Sign Up' : 'Log In'}</button>
+        <button type="submit" disabled={loading}>
+          {loading ? 'Processing...' : isSignUp ? 'Sign Up' : 'Log In'}
+        </button>
       </form>
 
-=======
-      <h1>User Login</h1>
-      <form onSubmit={handleLogin}>
-        <input
-          type="email"
-          placeholder="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-        />
-        <input
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-        />
-        <button type="submit">Log In</button>
-      </form>
-      {error && <p className="error">{error}</p>} {/* Display login errors */}
->>>>>>> 28754a433e79c73721069d1a693501bf9d8a5a1d
       <button onClick={goBack}>Back to Home</button>
 
       <div className="toggle-signup">
@@ -102,9 +89,4 @@ function UserPage({ goBack }) {
   );
 }
 
-<<<<<<< HEAD
 export default UserPage;
-
-=======
-export default UserPage;
->>>>>>> 28754a433e79c73721069d1a693501bf9d8a5a1d

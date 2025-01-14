@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { auth, db, createUserWithEmailAndPassword, signInWithEmailAndPassword } from './firebase'; 
 import { doc, setDoc } from 'firebase/firestore';
+import { useNavigate } from 'react-router-dom'; // Import useNavigate
 
 function StaffPage({ goBack }) {
   const [isSignUp, setIsSignUp] = useState(false);
@@ -8,8 +9,11 @@ function StaffPage({ goBack }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [name, setName] = useState('');  // Add a name state
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+
+  const navigate = useNavigate(); // Initialize useNavigate
 
   const handleAuth = async (e) => {
     e.preventDefault();
@@ -28,14 +32,16 @@ function StaffPage({ goBack }) {
         const userCredential = await createUserWithEmailAndPassword(auth, email, password);
         const user = userCredential.user;
 
-        // Store staff info in Firestore with email and password
+        // Store staff info in Firestore with name, staffID, email, and password
         await setDoc(doc(db, 'staff', user.uid), {
+          name: name,  // Store the staff's name
           staffID: staffID,
           email: user.email,
           createdAt: new Date(),
         });
 
-        alert('Sign up successful!');
+       
+        navigate('/staff-dash');
       } catch (err) {
         setError(err.message);
       }
@@ -43,7 +49,8 @@ function StaffPage({ goBack }) {
       // Log In Logic
       try {
         await signInWithEmailAndPassword(auth, email, password);
-        alert('Login successful!');
+     
+        navigate('/staff-dash');
       } catch (err) {
         setError(err.message);
       }
@@ -61,6 +68,13 @@ function StaffPage({ goBack }) {
       <form onSubmit={handleAuth}>
         {isSignUp ? (
           <>
+            <input 
+              type="text" 
+              placeholder="Name"  // Name input field
+              value={name} 
+              onChange={(e) => setName(e.target.value)} 
+              required 
+            />
             <input 
               type="text" 
               placeholder="Staff ID" 

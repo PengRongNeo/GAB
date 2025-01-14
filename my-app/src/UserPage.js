@@ -1,14 +1,18 @@
 import React, { useState } from 'react';
 import { auth, db, createUserWithEmailAndPassword, signInWithEmailAndPassword } from './firebase'; 
 import { doc, setDoc } from 'firebase/firestore';
+import { useNavigate } from 'react-router-dom'; // Import useNavigate
 
 function UserPage({ goBack }) {
   const [isSignUp, setIsSignUp] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [name, setName] = useState('');  // Add a name input
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  
+  const navigate = useNavigate(); // Initialize useNavigate
 
   const handleAuth = async (e) => {
     e.preventDefault();
@@ -27,14 +31,18 @@ function UserPage({ goBack }) {
         const userCredential = await createUserWithEmailAndPassword(auth, email, password);
         const user = userCredential.user;
 
-        // Store user info in Firestore with password in plaintext (NOT RECOMMENDED)
+        // Store user info in Firestore with additional attributes
         await setDoc(doc(db, 'users', user.uid), {
           email: user.email,
+          name: name,  // Store the user's name
+          wallet: 0,  // Initialize wallet balance as 0
+          cart: [],  // Initialize cart as an empty list
+          preorder: [],  // Initialize preorder as an empty list
           createdAt: new Date(),
-          vouchers: [],  // Initialize vouchers as an empty list
         });
 
-        alert('Sign up successful!');
+    
+        navigate('/user-dash'); // Redirect to UserDash page after signup
       } catch (err) {
         setError(err.message);
       }
@@ -42,7 +50,8 @@ function UserPage({ goBack }) {
       // Log In Logic
       try {
         await signInWithEmailAndPassword(auth, email, password);
-        alert('Login successful!');
+
+        navigate('/user-dash'); // Redirect to UserDash page after login
       } catch (err) {
         setError(err.message);
       }
@@ -58,8 +67,30 @@ function UserPage({ goBack }) {
       {error && <p style={{ color: 'red' }}>{error}</p>}
 
       <form onSubmit={handleAuth}>
-        <input type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} required />
-        <input type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} required />
+        {isSignUp && (
+          <input 
+            type="text" 
+            placeholder="Full Name" 
+            value={name} 
+            onChange={(e) => setName(e.target.value)} 
+            required 
+          />
+        )}
+        
+        <input 
+          type="email" 
+          placeholder="Email" 
+          value={email} 
+          onChange={(e) => setEmail(e.target.value)} 
+          required 
+        />
+        <input 
+          type="password" 
+          placeholder="Password" 
+          value={password} 
+          onChange={(e) => setPassword(e.target.value)} 
+          required 
+        />
         
         {isSignUp && (
           <input 

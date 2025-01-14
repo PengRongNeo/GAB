@@ -1,45 +1,89 @@
 import React, { useState } from 'react';
-import { auth, db } from './firebase'; // Ensure you've set up firebase.js as described earlier
-import { signInWithEmailAndPassword } from 'firebase/auth';
-import { doc, getDoc } from 'firebase/firestore';
+import { auth, db, createUserWithEmailAndPassword, signInWithEmailAndPassword } from './firebase'; 
+import { doc, setDoc } from 'firebase/firestore';
 
 function StaffPage({ goBack }) {
-  const [staffId, setStaffId] = useState('');
+  const [isSignUp, setIsSignUp] = useState(false);
+  const [staffID, setStaffID] = useState('');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
-  const [successMessage, setSuccessMessage] = useState('');
 
-  const handleLogin = async (e) => {
-    e.preventDefault(); // Prevent form from refreshing the page
+  const handleAuth = async (e) => {
+    e.preventDefault();
+    setLoading(true);
     setError('');
-    setSuccessMessage('');
 
-    try {
-      // Authenticate the staff
-      const userCredential = await signInWithEmailAndPassword(auth, staffId, password);
-      const user = userCredential.user;
-
-      // Verify if the user is a staff in Firestore
-      const staffDoc = await getDoc(doc(db, 'staff', user.uid));
-      if (staffDoc.exists()) {
-        setSuccessMessage('Login successful! Welcome, Staff.');
-        console.log('Staff details:', staffDoc.data());
-        // Redirect to staff dashboard or perform further actions
-      } else {
-        throw new Error('Unauthorized access. Staff details not found.');
+    if (isSignUp) {
+      // Sign Up Logic
+      if (password !== confirmPassword) {
+        setError('Passwords do not match!');
+        setLoading(false);
+        return;
       }
-    } catch (err) {
-      setError(err.message);
+
+      try {
+        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+        const user = userCredential.user;
+
+        // Store staff info in Firestore
+        await setDoc(doc(db, 'staff', user.uid), {
+          staffID: staffID,
+          email: user.email,
+          createdAt: new Date(),
+        });
+
+        alert('Sign up successful!');
+      } catch (err) {
+        setError(err.message);
+      }
+    } else {
+      // Log In Logic
+      try {
+        await signInWithEmailAndPassword(auth, email, password);
+        alert('Login successful!');
+      } catch (err) {
+        setError(err.message);
+      }
     }
+
+    setLoading(false);
   };
 
   return (
     <div className="portal">
+<<<<<<< HEAD
+      <h1>{isSignUp ? 'Staff Sign Up' : 'Staff Login'}</h1>
+
+      {error && <p style={{ color: 'red' }}>{error}</p>}
+
+      <form onSubmit={handleAuth}>
+        {isSignUp ? (
+          <>
+            <input type="text" placeholder="Staff ID" value={staffID} onChange={(e) => setStaffID(e.target.value)} required />
+            <input type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} required />
+          </>
+        ) : (
+          <input type="text" placeholder="Staff ID (email used for login)" value={email} onChange={(e) => setEmail(e.target.value)} required />
+        )}
+
+        <input type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} required />
+        
+        {isSignUp && (
+          <input type="password" placeholder="Confirm Password" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} required />
+        )}
+
+        <button type="submit" disabled={loading}>{loading ? 'Processing...' : isSignUp ? 'Sign Up' : 'Log In'}</button>
+      </form>
+
+=======
       <h1>Staff Login</h1>
       <form onSubmit={handleLogin}>
         <input
           type="text"
-          placeholder="Staff ID (Email)"
+          placeholder="Staff ID"
           value={staffId}
           onChange={(e) => setStaffId(e.target.value)}
           required
@@ -53,9 +97,17 @@ function StaffPage({ goBack }) {
         />
         <button type="submit">Log In</button>
       </form>
-      {error && <p className="error">{error}</p>}
-      {successMessage && <p className="success">{successMessage}</p>}
+      {error && <p className="error">{error}</p>} {/* Display login errors */}
+>>>>>>> 28754a433e79c73721069d1a693501bf9d8a5a1d
       <button onClick={goBack}>Back to Home</button>
+
+      <div className="toggle-signup">
+        {isSignUp ? (
+          <p>Already have an account? <span onClick={() => setIsSignUp(false)} style={{ color: 'blue', cursor: 'pointer' }}>Log in here</span></p>
+        ) : (
+          <p>Don't have an account? <span onClick={() => setIsSignUp(true)} style={{ color: 'blue', cursor: 'pointer' }}>Sign up here</span></p>
+        )}
+      </div>
     </div>
   );
 }

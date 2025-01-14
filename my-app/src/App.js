@@ -4,7 +4,7 @@ import StaffPage from './StaffPage.js';
 import UserPage from './UserPage.js';
 import UserDash from './UserDash.js';  // Assuming you created UserDash
 import StaffDash from './StaffDash.js';  // Assuming you created StaffDash
-import Test from './{Test}.js';
+import ProductMgmt from './Product.js';
 import './App.css'; // Importing CSS for styling
 
 function App() {
@@ -34,7 +34,7 @@ function App() {
            )}
            {view === 'staff' && <StaffPage goBack={() => setView('home')} />}
            {view === 'user' && <UserPage goBack={() => setView('home')} />}
-           {view === 'test' && <UserPage goBack={() => setView('home')} />}
+           {view === 'test' && <ProductMgmt goBack={() => setView('home')} />}
          </div>
         } />
         
@@ -51,7 +51,7 @@ function App() {
         <Route path="/staff-dash" element={<StaffDash />} /> 
 
         {/* Test route */}
-        <Route path="/test" element={<{ur test page} />} /> 
+        <Route path="/test" element={<ProductMgmt />} /> 
       </Routes>
     </Router>
   );

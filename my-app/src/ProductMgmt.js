@@ -3,7 +3,6 @@ import './ProductMgmt.css';
 import { db } from './firebase';
 import {
   collection,
-  query,
   onSnapshot,
   doc,
   setDoc,
@@ -172,10 +171,10 @@ function AdminProductPage() {
 
       <Notification message={error || notification} type={error ? 'error' : 'success'} />
 
-      <div className="product-container">
+      <div className="product-container" style={{height: 1200}}>
         <div>
           <h2>Product List</h2>
-          <div className="product-list">
+          <div className="product-list" style={{height: 500}}>
             {filteredProducts.map((product) => (
               <div
                 key={product.id}
@@ -217,6 +216,7 @@ function AdminProductPage() {
               value={newProduct.name}
               onChange={handleInputChange}
               className="form-input"
+              style = {{width: 300}}
             />
             <input
               type="text"
@@ -225,6 +225,7 @@ function AdminProductPage() {
               value={newProduct.price}
               onChange={handleInputChange}
               className="form-input"
+              style = {{width: 300}}
             />
             <input
               type="text"
@@ -233,6 +234,7 @@ function AdminProductPage() {
               value={newProduct.qty}
               onChange={handleInputChange}
               className="form-input"
+              style = {{width: 300}}
             />
             <input
               type="text"
@@ -241,6 +243,7 @@ function AdminProductPage() {
               value={newProduct.image}
               onChange={handleInputChange}
               className="form-input"
+              style = {{width: 300}}
             />
             <button type="submit" className="add-button">
               Add Product

@@ -4,58 +4,74 @@ import './ProductMgmt.css';
 const initialProductsData = [
   {
     id: 1,
-    name: 'Apple',
-    price: 2.5,
+    name: 'Lays Potato Chips Classic',
+    price: 5.35,
     qty: 10,
-    image: 'https://media.istockphoto.com/id/184276818/photo/red-apple.jpg?s=612x612&w=0&k=20&c=NvO-bLsG0DJ_7Ii8SSVoKLurzjmV0Qi4eGfn6nW3l5w=',
+    image: 'https://ip.prod.freshop.retail.ncrcloud.com/resize?url=https://images.freshop.ncrcloud.com/00028400090858/27c61e6d7a4ca44cec9d94f8914ce3b6_large.png&width=512&type=webp&quality=90',
   },
   {
     id: 2,
-    name: 'Banana',
-    price: 1.5,
+    name: 'Lays Potato Chips Sour Cream and Onion',
+    price: 5.35,
     qty: 3,
-    image: 'https://static.wixstatic.com/media/53e8bb_a1e88e551162485eb4ff962437300872~mv2.jpeg/v1/crop/x_0,y_105,w_1024,h_919/fill/w_560,h_560,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/Banana.jpeg',
+    image: 'https://media.nedigital.sg/fairprice/fpol/media/images/product/XL/13253763_XL1_20240902.jpg',
   },
   {
     id: 3,
-    name: 'Toothpaste',
-    price: 3.0,
+    name: 'Lays Potato Chips Nori Seaweed',
+    price: 5.35,
     qty: 8,
-    image: 'https://i5.walmartimages.com/seo/Colgate-Max-Fresh-Travel-Size-Toothpaste-with-Mini-Breath-Strips-Cool-Mint-1-0-Ounce_c9939bee-e856-4af8-a035-ab3599a3892d.d767abbdd671d2756d77a5ec63e2d74b.jpeg',
+    image: 'https://media.nedigital.sg/fairprice/fpol/media/images/product/XL/13232157_XL1_20230427.jpg',
   },
   {
     id: 4,
-    name: 'Notebook',
-    price: 5.0,
+    name: 'Melona Melon Ice Cream',
+    price: 2.0,
     qty: 12,
-    image: 'https://m.media-amazon.com/images/I/718vM+75UNL.jpg',
+    image: 'https://wimg.heraldcorp.com/content/default/2023/08/16/20230816000600_0.jpg',
   },
   {
     id: 5,
-    name: 'Pen',
-    price: 1.0,
+    name: 'Melona Strawberry Ice Cream',
+    price: 2.0,
     qty: 0,
-    image: 'https://www.pilotpen.com.sg/wp-content/uploads/2019/10/Evolt-L.jpg',
+    image: 'https://down-sg.img.susercontent.com/file/7b09e12af0656ff575fbe7076dd10ee8',
   },
   {
     id: 6,
-    name: 'Milk',
-    price: 1.8,
-    qty: 4,
-    image: 'https://myras.com.sg/cdn/shop/products/MEIJI_Fresh_Milk_2L.jpg?v=1622560346',
+    name: 'Cornetto Classic Ice Cream',
+    price: 2.0,
+    qty: 0,
+    image: 'https://www.creedfoodservice.co.uk/media/catalog/product/cache/935f6cdd49b787f7edd26d0d606f282f/a/d/adda3e386cefc7e298991d3af5a2f047.jpg',
   },
   {
     id: 7,
-    name: 'Chips',
+    name: 'Cornetto Double Chocolate Ice Cream',
     price: 2.0,
-    qty: 7,
-    image: 'https://m.media-amazon.com/images/I/81TWeuyzk3L._SL1500_.jpg',
+    qty: 0,
+    image: 'https://springs.com.pk/cdn/shop/files/8961014014228.jpg?v=1714394949',
+  },
+  {
+    id: 8,
+    name: 'Soccer Ball',
+    price: 20.0,
+    qty: 1,
+    image: 'https://i0.wp.com/championsports.com.sg/wp-content/uploads/2024/07/Adidas-Euro-24-Final-League-Soccer-Ball-IX4046-1.jpg?fit=800%2C800&ssl=1',
+  },
+  {
+    id: 9,
+    name: 'BasketBall',
+    price: 20.0,
+    qty: 1,
+    image: 'https://contents.mediadecathlon.com/p2480634/k$170e3f4f626da03c4c58201e6f014ea7/size-7-basketball-bt100-for-men-ages-13-and-up-orange-tarmak-8648076.jpg',
   },
 ];
 
 function AdminProductPage() {
   const [products, setProducts] = useState(initialProductsData);
   const [searchTerm, setSearchTerm] = useState('');
+  const [filteredProducts, setFilteredProducts] = useState(initialProductsData);
+  const [isFilterOpen, setIsFilterOpen] = useState(false);
   const [newProduct, setNewProduct] = useState({
     name: '',
     price: '',
@@ -65,7 +81,24 @@ function AdminProductPage() {
   const [error, setError] = useState('');
 
   const handleSearch = (e) => {
-    setSearchTerm(e.target.value);
+    const term = e.target.value.toLowerCase();
+    setSearchTerm(term);
+    const results = products.filter((product) =>
+      product.name.toLowerCase().includes(term)
+    );
+    setFilteredProducts(results);
+  };
+
+  const toggleFilter = () => {
+    setIsFilterOpen(!isFilterOpen);
+  };
+
+  const handleFilter = (order) => {
+    const sortedProducts = [...filteredProducts].sort((a, b) => {
+      return order === 'low-to-high' ? a.price - b.price : b.price - a.price;
+    });
+    setFilteredProducts(sortedProducts);
+    setIsFilterOpen(false); // Close filter dropdown
   };
 
   const handleInputChange = (e) => {
@@ -96,36 +129,49 @@ function AdminProductPage() {
       image,
     };
 
-    setProducts([...products, newProductEntry]);
+    const updatedProducts = [...products, newProductEntry];
+    setProducts(updatedProducts);
+    setFilteredProducts(updatedProducts); // Update filtered list too
     setNewProduct({ name: '', price: '', qty: '', image: '' });
     setError('');
   };
-
-  const filteredProducts = products.filter((product) =>
-    product.name.toLowerCase().includes(searchTerm.toLowerCase())
-  );
 
   return (
     <div className="product-page full-screen">
       <header className="product-header">
         <h1>Admin Product Management</h1>
-        <input
-          type="text"
-          placeholder="Search for products..."
-          value={searchTerm}
-          onChange={handleSearch}
-          className="search-bar"
-        />
+        <div className="search-filter-container">
+          <input
+            type="text"
+            placeholder="Search for products..."
+            value={searchTerm}
+            onChange={handleSearch}
+            className="search-bar"
+          />
+          <div className="filter-dropdown">
+            <button onClick={toggleFilter} className="filter-button">
+              Filter
+            </button>
+            {isFilterOpen && (
+              <div className="filter-options">
+                <button onClick={() => handleFilter('low-to-high')}>
+                  Price: Low to High
+                </button>
+                <button onClick={() => handleFilter('high-to-low')}>
+                  Price: High to Low
+                </button>
+              </div>
+            )}
+          </div>
+        </div>
       </header>
 
       {error && <p className="error-message">{error}</p>}
 
       <div className="product-container">
         <div>
-        <h2>Product List</h2>
-        
-        <div className="product-list">
-          
+          <h2>Product List</h2>
+          <div className="product-list">
             {filteredProducts.map((product) => (
               <div
                 key={product.id}
@@ -143,7 +189,7 @@ function AdminProductPage() {
             ))}
           </div>
         </div>
-        <div className="add-product" style={{paddingRight:20}}>
+        <div className="add-product">
           <h2>Add New Product</h2>
           <form onSubmit={handleAddProduct}>
             <input
@@ -153,7 +199,6 @@ function AdminProductPage() {
               value={newProduct.name}
               onChange={handleInputChange}
               className="form-input"
-              style={{width: 300}}
             />
             <input
               type="text"
@@ -162,7 +207,6 @@ function AdminProductPage() {
               value={newProduct.price}
               onChange={handleInputChange}
               className="form-input"
-              style={{width: 300}}
             />
             <input
               type="text"
@@ -171,7 +215,6 @@ function AdminProductPage() {
               value={newProduct.qty}
               onChange={handleInputChange}
               className="form-input"
-              style={{width: 300}}
             />
             <input
               type="text"
@@ -180,18 +223,14 @@ function AdminProductPage() {
               value={newProduct.image}
               onChange={handleInputChange}
               className="form-input"
-              style={{width: 300}}
             />
-            <button type="submit" className="add-button" >
+            <button type="submit" className="add-button">
               Add Product
             </button>
           </form>
         </div>
-        </div>
-
-        
       </div>
-
+    </div>
   );
 }
 

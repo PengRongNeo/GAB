@@ -9,6 +9,7 @@ import HandleRequest from './HandleRequest.js';
 import SubmitTaskLog from './SubmitTaskLog.js';
 import Product from './Product.js';
 import AdminProductPage from './ProductMgmt.js';
+import UserManagement from './UserManagement';  // Create this component
 
 import './App.css'; // Importing CSS for styling
 
@@ -66,6 +67,8 @@ function App() {
 
         {/* Handle Requests */}
         <Route path="/product-manage" element={<AdminProductPage />} /> 
+
+        <Route path="/user-management" element={<UserManagement />} />
 
 
       </Routes>

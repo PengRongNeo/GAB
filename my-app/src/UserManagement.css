@@ -1,0 +1,134 @@
+/* General container styles */
+.user-management-container {
+    max-width: 90%; /* Increase width to 90% for a larger horizontal spread */
+    margin: 0 auto;
+    padding: 40px; /* Keep generous padding */
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f4f7fa;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    min-height: 90vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    gap: 30px;
+  }
+  
+  /* Add this rule to change the title color to black */
+  .page-title {
+    color: black;
+    font-size: 2rem; /* Adjust the size as needed */
+    font-weight: bold;
+    margin-bottom: 20px;
+  }
+  
+  
+  /* Header Styles */
+  .user-management-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+  
+  .header-left {
+    flex: 1;
+  }
+  
+  .search-bar {
+    padding: 12px 15px;
+    width: 500px; /* Widen the search bar */
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    font-size: 16px;
+    box-sizing: border-box;
+  }
+  
+  .header-right {
+    flex: 0;
+  }
+  
+  .select-all-button {
+    padding: 12px 20px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+  }
+  
+  .select-all-button:hover {
+    background-color: #0056b3;
+  }
+  
+  /* Table Styles */
+  .user-table-container {
+    overflow-x: auto;
+    margin-bottom: 30px;
+  }
+  
+  .user-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  }
+  
+  .user-table th,
+  .user-table td {
+    padding: 12px 20px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+    font-size: 16px;
+  }
+  
+  .user-table th {
+    background-color: #007bff;
+    color: white;
+    font-weight: bold;
+  }
+  
+  .user-table tr:hover {
+    background-color: #f9f9f9;
+  }
+  
+  .user-table td {
+    font-size: 14px;
+  }
+  
+  /* Action Buttons */
+  .user-management-actions {
+    display: flex;
+    justify-content: space-between;
+    gap: 30px; /* Increase the gap for more spacing between buttons */
+    margin-top: 30px;
+  }
+  
+  .action-button {
+    padding: 15px 25px;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 16px;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    min-width: 200px; /* Increase button width for a more balanced look */
+  }
+  
+  .action-button:hover {
+    background-color: #218838;
+    transform: translateY(-2px);
+  }
+  
+  .action-button:disabled {
+    background-color: #d6d6d6;
+    cursor: not-allowed;
+    transform: none;
+  }
+  

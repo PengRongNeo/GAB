@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import './Product.css';
+import { collection, addDoc } from 'firebase/firestore';
+import { db } from './firebase';  // Import Firebase configuration
 
 const productsData = [
   {
@@ -78,15 +80,32 @@ function Product() {
     scrollToTop(); // Scroll to the top when a product is added to the cart
   };
 
-  const handleRequestProduct = () => {
+  const handleRequestProduct = async () => {
     if (!requestedProduct.trim()) {
       setRequestMessage('Please enter a product name to request.');
       return;
     }
-    setRequestMessage(`Request submitted for: ${requestedProduct}`);
-    setRequestedProduct('');
-    setTimeout(() => setRequestMessage(''), 3000); // Clear message after 3 seconds
-    scrollToTop();
+  
+    // Prepare the request data
+    const requestData = {
+      name: 'User',  // Replace this with actual user information (e.g., logged-in user)
+      product: requestedProduct,
+      quantity: 1,  // You can change this based on your need or input field
+      date: new Date().toISOString(),
+      status: 'unfulfilled',
+    };
+  
+    try {
+      // Add request to Firebase
+      await addDoc(collection(db, 'requests'), requestData);
+      setRequestMessage(`Request submitted for: ${requestedProduct}`);
+      setRequestedProduct('');
+      setTimeout(() => setRequestMessage(''), 3000); // Clear message after 3 seconds
+      scrollToTop();  // Scroll to the top when a request is submitted
+    } catch (e) {
+      console.error("Error adding document: ", e);
+      setRequestMessage('Failed to submit request.');
+    }
   };
 
   const filteredProducts = productsData.filter((product) =>

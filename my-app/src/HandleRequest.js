@@ -1,15 +1,31 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './HandleRequest.css';
+import { collection, query, where, getDocs } from 'firebase/firestore';
+import { db } from './firebase';  // Import Firebase configuration
 
 const HandleRequest = () => {
   const [searchTerm, setSearchTerm] = useState('');
-  const [requests, setRequests] = useState([
-    { name: 'Alice', product: 'Widget A', quantity: 10, date: '2025-01-10', status: 'unfulfilled' },
-    { name: 'Bob', product: 'Widget B', quantity: 5, date: '2025-01-12', status: 'pending' },
-    { name: 'Charlie', product: 'Widget C', quantity: 20, date: '2025-01-08', status: 'fulfilled' },
-  ]);
-
+  const [requests, setRequests] = useState([]);
   const [filterBy, setFilterBy] = useState('name'); // Default filter option
+
+  useEffect(() => {
+    // Fetch requests from Firestore
+    const fetchRequests = async () => {
+      try {
+        const q = query(collection(db, 'requests'));
+        const querySnapshot = await getDocs(q);
+        const requestsData = querySnapshot.docs.map(doc => ({
+          id: doc.id,  // Firebase document ID
+          ...doc.data(),
+        }));
+        setRequests(requestsData);
+      } catch (e) {
+        console.error("Error getting documents: ", e);
+      }
+    };
+
+    fetchRequests();
+  }, []);  // Empty dependency array means this will run once when the component mounts
 
   const handleSearch = (event) => {
     setSearchTerm(event.target.value.toLowerCase());
@@ -100,3 +116,4 @@ const HandleRequest = () => {
 };
 
 export default HandleRequest;
+

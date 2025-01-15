@@ -58,6 +58,7 @@ function Product() {
   const [searchTerm, setSearchTerm] = useState('');
   const [error, setError] = useState('');
   const [requestedProduct, setRequestedProduct] = useState('');
+  const [requestMessage, setRequestMessage] = useState('');
 
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -79,12 +80,13 @@ function Product() {
 
   const handleRequestProduct = () => {
     if (!requestedProduct.trim()) {
-      alert('Please enter a product name to request.');
+      setRequestMessage('Please enter a product name to request.');
       return;
     }
-    alert(`Request submitted for: ${requestedProduct}`);
-    setRequestedProduct(''); // Clear the input field
-    scrollToTop(); // Scroll to the top when a request is submitted
+    setRequestMessage(`Request submitted for: ${requestedProduct}`);
+    setRequestedProduct('');
+    setTimeout(() => setRequestMessage(''), 3000); // Clear message after 3 seconds
+    scrollToTop();
   };
 
   const filteredProducts = productsData.filter((product) =>
@@ -106,8 +108,10 @@ function Product() {
 
       {error && <p className="error-message">{error}</p>}
 
+      {requestMessage && <div className="request-notification">{requestMessage}</div>}
+
       <div className="product-container">
-        <div className="product-list" style={{padding: 50}}>
+        <div className="product-list" style={{ padding: 50 }}>
           {filteredProducts.map((product) => (
             <div
               key={product.id}
@@ -145,17 +149,17 @@ function Product() {
         </div>
       </div>
 
-      <div className="request-product" style={{alignItems: 'center'}}>
-        <h2 style={{marginLeft: 10}}>Request a Product</h2>
+      <div className="request-product" style={{ alignItems: 'center' }}>
+        <h2 style={{ marginLeft: 10 }}>Request a Product</h2>
         <input
           type="text"
           placeholder="Enter product name..."
           value={requestedProduct}
           onChange={(e) => setRequestedProduct(e.target.value)}
           className="request-input"
-          style={{width: 500, marginLeft: 10}}
+          style={{ width: 500, marginLeft: 10 }}
         />
-        <button onClick={handleRequestProduct} className="request-button" style={{margin: 10}}>
+        <button onClick={handleRequestProduct} className="request-button" style={{ margin: 10 }}>
           Request Product
         </button>
       </div>

@@ -161,3 +161,28 @@ body {
     }
   }
   
+  .request-notification {
+    position: fixed;
+    top: 20px; /* Distance from the top */
+    left: 50%; /* Position it at 50% of the screen width */
+    transform: translateX(-50%); /* Offset by half of its width to center it */
+    background-color: #FFA500; /* Orange background */
+    color: white; /* White text */
+    padding: 15px 20px;
+    border-radius: 5px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    font-size: 16px;
+    font-weight: bold;
+    animation: fadeOut 3s ease-in-out;
+    z-index: 1000; /* Make sure it stays on top of other content */
+  }
+  
+  
+  @keyframes fadeOut {
+    0% { opacity: 1; }
+    80% { opacity: 1; }
+    100% { opacity: 0; }
+  }
+  
+
+  

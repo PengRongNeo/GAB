@@ -1,6 +1,5 @@
-// firebase.js
 import { initializeApp } from "firebase/app";
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, sendPasswordResetEmail } from "firebase/auth"; // Import sendPasswordResetEmail
 import { getFirestore, collection, doc, setDoc, updateDoc, getDoc, getDocs, increment} from "firebase/firestore";
 import { getAnalytics } from "firebase/analytics";
 
@@ -22,9 +21,6 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 const analytics = getAnalytics(app); // Optional Analytics
-
-// Export the services and functions for use in other files
-
 
 // Firestore utility functions
 const getCartFromFirestore = async (userId) => {
@@ -49,7 +45,19 @@ const updateCartInFirestore = async (userId, cart) => {
   }
 };
 
- // In firebase.js
+// Function to send password reset email
+export const sendPasswordReset = async (email) => {
+  const auth = getAuth();
+  try {
+    await sendPasswordResetEmail(auth, email);
+    console.log('Password reset email sent successfully!');
+  } catch (error) {
+    console.error('Error sending password reset email:', error);
+    throw error; // You can throw the error to be handled where it's called
+  }
+};
+
+// In firebase.js
 export const updateWalletBalance = async (userId, newBalance) => {
   try {
     await db.collection("users").doc(userId).update({
@@ -59,7 +67,6 @@ export const updateWalletBalance = async (userId, newBalance) => {
     console.error("Error updating wallet balance: ", error);
   }
 };
-
 
 // Export all the necessary services and functions
 export {

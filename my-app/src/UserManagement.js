@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import './UserManagement.css'; // Add any necessary styles
 import { db, getDoc, doc, updateDoc, increment, collection, getDocs } from './firebase'; // Correct import
+import { getAuth, sendPasswordResetEmail } from 'firebase/auth'; // Import Firebase Authentication
+import { ToastContainer, toast } from 'react-toastify'; // Import ToastContainer and toast
+import 'react-toastify/dist/ReactToastify.css'; // Import CSS for Toastify
 
 const UserManagement = () => {
   const [users, setUsers] = useState([]);
@@ -100,6 +103,64 @@ const UserManagement = () => {
       });
   };
 
+  // Handle reset password for selected users
+  const handleResetPassword = () => {
+    if (selectedUsers.length !== 1) {
+      setError('Please select exactly one user to reset the password.');
+      return;
+    }
+
+    const userId = selectedUsers[0];
+    const userDocRef = doc(db, 'users', userId); // Get the user's document reference
+
+    getDoc(userDocRef)
+      .then((docSnapshot) => {
+        if (docSnapshot.exists()) {
+          const email = docSnapshot.data().email;
+          const auth = getAuth();
+
+          // Send the password reset email
+          sendPasswordResetEmail(auth, email)
+            .then(() => {
+              console.log(`Password reset email sent to ${email}`);
+              setError('');
+              toast.success('Password reset email sent successfully!', {
+                position: 'top-center', // Centered toast
+                autoClose: 5000,
+                hideProgressBar: true,
+                closeButton: false,
+                draggable: true,
+                theme: 'colored', // Optional: You can customize the theme (light, dark, colored)
+              });
+            })
+            .catch((error) => {
+              console.error('Error sending reset email:', error);
+              setError('Error sending reset email. Please try again.');
+              toast.error('Error sending reset email. Please try again.', {
+                position: 'top-center', // Centered toast
+                autoClose: 5000,
+                hideProgressBar: true,
+                closeButton: false,
+                draggable: true,
+                theme: 'colored', // Optional: You can customize the theme (light, dark, colored)
+              });
+            });
+        }
+      })
+      .catch((error) => {
+        console.error('Error fetching user data:', error);
+        setError('Error fetching user data. Please try again.');
+        toast.error('Error fetching user data. Please try again.', {
+          position: 'top-center', // Centered toast
+          autoClose: 5000,
+          hideProgressBar: true,
+          closeButton: false,
+          draggable: true,
+          theme: 'colored', // Optional: You can customize the theme (light, dark, colored)
+        });
+      });
+  };
+
   const filteredUsers = users.filter(user =>
     user.name.toLowerCase().includes(searchTerm)
   );
@@ -160,7 +221,9 @@ const UserManagement = () => {
         <button className="action-button" onClick={handleEditWalletClick}>
           Edit Wallet
         </button>
-        <button className="action-button">Reset Password</button>
+        <button className="action-button" onClick={handleResetPassword}>
+          Reset Password
+        </button>
         <button className="action-button">Suspend User</button>
       </div>
 
@@ -192,11 +255,11 @@ const UserManagement = () => {
           </div>
         </div>
       )}
+
+      {/* Toast Container */}
+      <ToastContainer />
     </div>
   );
 };
 
 export default UserManagement;
-
-
-

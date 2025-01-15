@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import './SubmitTaskLog.css'; // Import CSS for styling
-import { db } from './firebase'; // Import Firebase configuration
-import { collection, addDoc } from 'firebase/firestore'; // Firestore methods
+import { db, auth } from './firebase'; // Import Firebase configuration
+import { collection, addDoc,getDoc,doc, updateDoc } from 'firebase/firestore'; // Firestore methods
 
 function SubmitTaskLog() {
   const [description, setDescription] = useState('');
@@ -12,28 +12,56 @@ function SubmitTaskLog() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+  
     if (!description || selectedAdmins.length === 0) {
       alert('Please fill in all fields before submitting.');
       return;
     }
-
-    const newTaskLog = {
-      description: description,
-      adminSupervised: selectedAdmins,
-      timestamp: new Date().toISOString(),
-    };
-
+  
+    // Get current user info from Firebase Authentication
+    const currentUser = auth.currentUser;
+  
+    if (!currentUser) {
+      alert('You must be logged in to submit a task.');
+      return;
+    }
+  
     try {
+      // Get the user's data from the Firestore 'users' collection
+      const userRef = doc(db, 'users', currentUser.uid);
+      const userDoc = await getDoc(userRef);
+  
+      if (!userDoc.exists()) {
+        alert('User not found in Firestore.');
+        return;
+      }
+  
+      const userName = userDoc.data().name; // Get the user's name from Firestore
+  
+      const newTaskLog = {
+        description: description,
+        adminSupervised: selectedAdmins,
+        timestamp: new Date().toISOString(),
+        user: userName,  // Store the user's name from Firestore
+        userID: currentUser.uid,  // Store current user's UID for reference
+      };
+  
+      // Add the task log to Firestore
       const docRef = await addDoc(collection(db, 'taskLogs'), newTaskLog);
       console.log('Task log added with ID:', docRef.id);
-
+  
+      // Optionally update the user's data with the last submitted task timestamp
+      await updateDoc(userRef, {
+        lastSubmittedTask: newTaskLog.timestamp, // Store the timestamp of the last task submitted
+      });
+  
       setSubmitted(true);
       setTimeout(() => {
         setSubmitted(false);
         setDescription('');
         setSelectedAdmins([]);
-      }, 3000); // Reset the form after 3 seconds
+      }, 1000); // Reset the form after 1 second
+  
     } catch (error) {
       console.error('Error adding task log:', error);
       alert('Failed to submit task log. Please try again.');

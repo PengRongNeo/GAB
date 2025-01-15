@@ -1,7 +1,33 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom'; 
+import './UserDash.css'; // Import custom CSS for styling
+import { db, auth } from './firebase';  // Assuming firebase is initialized elsewhere
+import { doc, getDoc } from 'firebase/firestore';  // Firestore methods
+
 function UserDash() {
-  const navigate = useNavigate(); 
+  const navigate = useNavigate();
+  const [userData, setUserData] = useState({ name: '', wallet: 0 });
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    // Fetch user data (name and wallet balance) from Firestore using the current user’s UID
+    const fetchUserData = async () => {
+      const currentUser = auth.currentUser;
+      if (currentUser) {
+        const userRef = doc(db, 'users', currentUser.uid);
+        const userSnapshot = await getDoc(userRef);
+        if (userSnapshot.exists()) {
+          setUserData({
+            name: userSnapshot.data().name,
+            wallet: userSnapshot.data().wallet || 0,
+          });
+        }
+      }
+      setLoading(false);
+    };
+
+    fetchUserData();
+  }, []);
 
   const handleNavigation = (page) => {
     // Navigate to the respective page based on button clicked
@@ -22,26 +48,58 @@ function UserDash() {
 
   return (
     <div className="user-dashboard">
-      <h1>Welcome to the User Dashboard</h1>
-      <div className="button-group">
-        <button
-          className="custom-button"
-          onClick={() => handleNavigation('product')}
-        >
-          Products
-        </button>
-        <button
-          className="custom-button"
-          onClick={() => handleNavigation('submitTaskLog')}
-        >
-          Submit Task Log
-        </button>
-        <button
-          className="custom-button"
-          onClick={() => handleNavigation('transactionHistory')}
-        >
-          Transaction History
-        </button>
+      <header className="dashboard-header">
+        <h1>Welcome to the User Dashboard</h1>
+        <p>Choose a section to get started.</p>
+      </header>
+
+      <div className="button-grid">
+        {/* Top Right Section (User Info) */}
+        <div className="section-card user-info">
+          <h2>User Info</h2>
+          {loading ? (
+            <p>Loading...</p>
+          ) : (
+            <>
+              <p><strong>Name:</strong> {userData.name}</p>
+              <p><strong>Wallet Balance:</strong> ${userData.wallet}</p>
+            </>
+          )}
+        </div>
+
+        {/* Grid Sections for Other Actions */}
+        <div className="section-card">
+          <h2>Products</h2>
+          <p>View and manage products.</p>
+          <button
+            className="custom-button"
+            onClick={() => handleNavigation('product')}
+          >
+            Go to Products
+          </button>
+        </div>
+
+        <div className="section-card">
+          <h2>Submit Task Log</h2>
+          <p>Submit a task log for completed work.</p>
+          <button
+            className="custom-button"
+            onClick={() => handleNavigation('submitTaskLog')}
+          >
+            Go to Submit Task Log
+          </button>
+        </div>
+
+        <div className="section-card">
+          <h2>Transaction History</h2>
+          <p>View your transaction history.</p>
+          <button
+            className="custom-button"
+            onClick={() => handleNavigation('transactionHistory')}
+          >
+            Go to Transaction History
+          </button>
+        </div>
       </div>
     </div>
   );

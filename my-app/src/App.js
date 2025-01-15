@@ -11,6 +11,7 @@ import Product from './Product.js';
 import AdminProductPage from './ProductMgmt.js';
 import UserManagement from './UserManagement';  // Create this component
 import Checkout from './Checkout.js';
+import TaskManagementPage from './TaskManagement.js';
 
 import './App.css'; // Importing CSS for styling
 
@@ -24,17 +25,25 @@ function App() {
            <div className="app">
            {view === 'home' && (
              <div className="home">
-               <h1 className="title">Welcome to <br /><span>MWH Minimart</span></h1>
-               <p className="subtitle">Choose your portal to log in or sign up:</p>
-               <div className="button-group">
-                 <button className="custom-button" onClick={() => setView('staff')}>
-                   Staff Portal
-                 </button>
-                 <button className="custom-button" onClick={() => setView('user')}>
-                   User Portal
-                 </button>
-               </div>
+             <h1 className="title">
+               Welcome to <br />
+               <span>MWH Minimart</span>
+             </h1>
+             <img
+               src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQUovaIrSP9QWrJWNI_ZmR6A7BazFYG6bAP7w&s"
+               alt="Logo"
+               className="logo"
+             />
+             <p className="subtitle">Choose your portal to log in or sign up:</p>
+             <div className="button-group">
+               <button className="custom-button" onClick={() => setView('staff')}>
+                 Staff Portal
+               </button>
+               <button className="custom-button" onClick={() => setView('user')}>
+                 User Portal
+               </button>
              </div>
+           </div>
            )}
            {view === 'staff' && <StaffPage goBack={() => setView('home')} />}
            {view === 'user' && <UserPage goBack={() => setView('home')} />}
@@ -75,6 +84,9 @@ function App() {
         {/* Handle Requests */}
         <Route path="/checkout" element={<Checkout />} /> 
         
+
+        {/* UserPage route */}
+        <Route path="/task-manage" element={<TaskManagementPage />} />
 
 
       </Routes>

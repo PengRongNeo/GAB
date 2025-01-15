@@ -187,3 +187,103 @@ body {
   flex-direction: column; /* Stack buttons vertically */
   gap: 10px; /* Add space between buttons */
 }
+
+/* Task Management Full-Screen Design */
+/* TaskManagementPage.css */
+.task-management-container {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+h1 {
+  font-size: 2.5rem;
+  margin-bottom: 20px;
+}
+
+.loading {
+  font-size: 18px;
+  color: gray;
+}
+
+.error-message {
+  color: red;
+  font-size: 18px;
+  text-align: center;
+}
+
+.success-message {
+  color: green;
+  font-size: 18px;
+  text-align: center;
+  margin-top: 20px;
+}
+
+.task-management-content {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  margin-top: 20px;
+}
+
+.task-list {
+  width: 65%;
+  max-height: 600px;
+  overflow-y: auto;
+  margin-right: 20px;
+}
+
+.task-card {
+  background-color: #f9f9f9;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  margin-bottom: 15px;
+  padding: 15px;
+  cursor: pointer;
+}
+
+.task-card.selected {
+  background-color: #d3e5ff;
+  border-color: #0044cc;
+}
+
+.task-user, .task-admin, .task-description, .task-timestamp {
+  margin: 5px 0;
+}
+
+.award-points-container {
+  width: 30%;
+}
+
+.award-points-form {
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.award-points-form input {
+  padding: 10px;
+  font-size: 16px;
+  margin-bottom: 10px;
+  width: 100%;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.award-points-form button {
+  padding: 10px 20px;
+  background-color: #28a745;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.award-points-form button:hover {
+  background-color: #218838;
+}

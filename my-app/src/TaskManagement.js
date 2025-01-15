@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { db } from './firebase'; // Import your Firebase config
 import { collection, query, orderBy, onSnapshot, doc, updateDoc, deleteDoc, getDoc } from 'firebase/firestore';
 import './App.css'; // Import separate CSS file for styling
+import { useNavigate } from 'react-router-dom';
 
 function TaskManagementPage() {
   const [tasks, setTasks] = useState([]);
@@ -10,6 +11,7 @@ function TaskManagementPage() {
   const [selectedTaskId, setSelectedTaskId] = useState(null);  // Track selected task
   const [pointsToAward, setPointsToAward] = useState('');  // Points to award for the selected task
   const [successMessage, setSuccessMessage] = useState('');
+  const navigate = useNavigate();
 
   useEffect(() => {
     // Reference to the taskLogs collection
@@ -116,8 +118,42 @@ function TaskManagementPage() {
   
 
   return (
-    <div className="task-management-container">
-      <h1>Task Management</h1>
+    <div 
+  className="task-management-container" 
+  style={{
+    width: '90%',  /* Increase width to 90% for a larger horizontal spread */
+    margin: '0 auto',
+    padding: '40px', /* Keep generous padding */
+    fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
+    backgroundColor: '#f4f7fa',
+    borderRadius: '8px',
+    boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
+    minHeight: '90vh',
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'flex-start',
+    gap: '30px'
+  }}
+>
+
+
+      <button 
+        onClick={() => navigate('/staff-dash')} 
+        style={{ 
+          position: 'absolute', 
+          top: '10px', 
+          left: '10px', 
+          color: 'white', 
+          border: 'none', 
+          borderRadius: '5px', 
+          cursor: 'pointer' ,
+          width:100,
+          backgroundColor: 'black'
+        }}
+      >Back</button>
+      <div style={{backgroundColor:'rgb(100, 100, 100)', padding: 20, borderRadius:15}}>
+      <h1 className="page-title" style={{color:'white'}}>Task Management</h1>
+      </div>
       {loading && <p className="loading">Loading tasks...</p>}
       {error && <p className="error-message">{error}</p>}
       {!loading && tasks.length === 0 && <p>No tasks pending.</p>}

@@ -12,6 +12,52 @@ function StaffDash() {
 
   return (
     <div className="staff-dashboard">
+      <button 
+        onClick={() => navigate('/')} 
+        style={{ 
+          position: 'absolute', 
+          top: '10px', 
+          left: '10px', 
+          color: 'white', 
+          border: 'none', 
+          borderRadius: '5px', 
+          cursor: 'pointer' ,
+          width:100,
+          backgroundColor: 'black'
+        }}
+      >Back</button>
+
+      <button 
+        onClick={() => navigate('/report')} 
+        style={{ 
+          position: 'absolute', 
+          top: '10px', 
+          right: '10px', 
+          color: 'white', 
+          border: 'none', 
+          borderRadius: '5px', 
+          cursor: 'pointer' ,
+          width: 200,
+          backgroundColor: 'blue'
+        }}
+      >Weekly Report</button>
+
+      <button 
+        onClick={() => navigate('/ad-auc')} 
+        style={{ 
+          position: 'absolute', 
+          top: '50px', 
+          right: '10px', 
+          color: 'white', 
+          border: 'none', 
+          borderRadius: '5px', 
+          cursor: 'pointer' ,
+          width: 200,
+          backgroundColor: 'darkblue'
+        }}
+      >Manage Auction</button>
+
+      
       <header className="dashboard-header">
         <h1>Staff Dashboard</h1>
         <p>Welcome back! Choose a section to manage.</p>

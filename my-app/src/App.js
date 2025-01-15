@@ -12,6 +12,9 @@ import AdminProductPage from './ProductMgmt.js';
 import UserManagement from './UserManagement';  // Create this component
 import Checkout from './Checkout.js';
 import TaskManagementPage from './TaskManagement.js';
+import AdminAuction from './AdminAuction.js';
+import Report from './Report.js';
+import UserAuction from './UserAuction.js';
 
 
 import './App.css'; // Importing CSS for styling
@@ -56,7 +59,16 @@ function App() {
         
         {/* StaffPage route */}
         <Route path="/staff" element={<StaffPage />} />
+
+        {/* Report route */}
+        <Route path="/report" element={<Report />} />
         
+        {/* AdminAuction route */}
+        <Route path="/ad-auc" element={<AdminAuction />} />
+
+        {/* UserAuction route */}
+        <Route path="/u-auc" element={<UserAuction />} />
+
         {/* UserPage route */}
         <Route path="/user" element={<UserPage />} />
         
@@ -89,8 +101,8 @@ function App() {
         {/* UserPage route */}
         <Route path="/task-manage" element={<TaskManagementPage />} />
 
-
-
+        {/* Logout route */}
+        <Route path="/" element={<App />} />
 
       </Routes>
     </Router>

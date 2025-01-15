@@ -1,0 +1,158 @@
+/* AdminAuction.css */
+
+/* General Layout */
+.admin-auction-container {
+    padding: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+    font-family: Arial, sans-serif;
+    display: flex;
+    justify-content: space-between;
+    gap: 40px;
+  }
+  
+  .admin-auction-header {
+    font-size: 2em;
+    font-weight: bold;
+    margin-bottom: 20px;
+    color: #333;
+    text-align: center;
+    width: 100%;
+  }
+  
+  /* Add Item Form */
+  .add-item-form {
+    flex: 1;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    max-width: 350px;
+  }
+  
+  .add-item-form h2 {
+    margin-bottom: 20px;
+    color: #333;
+  }
+  
+  .add-item-form input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+    font-size: 1em;
+  }
+  
+  .add-item-form button {
+    background-color: #28a745;
+    color: white;
+    padding: 10px;
+    font-size: 1em;
+    cursor: pointer;
+    border: none;
+    border-radius: 5px;
+  }
+  
+  .add-item-form button:hover {
+    background-color: #218838;
+  }
+  
+  /* Auction Items List */
+  .auction-items-list {
+    flex: 2;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+    overflow-y: auto;
+    max-height: 600px;
+  }
+  
+  .auction-item {
+    background-color: #f9f9f9;
+    padding: 15px;
+    margin: 10px;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    transition: transform 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%; /* Ensure it fits into the grid cell */
+    max-width: 250px; /* Max width for the items */
+    height: auto;
+    text-align: center;
+  }
+  
+  
+  .auction-item:hover {
+    transform: scale(1.05);
+  }
+  
+  .auction-item h3 {
+    font-size: 1.2em;
+    color: #333;
+    margin-bottom: 10px;
+  }
+  
+  .auction-item p {
+    font-size: 1em;
+    color: #555;
+    margin: 5px 0;
+  }
+  
+  .auction-item img {
+    max-width: 150px;
+    margin-top: 15px;
+    border-radius: 8px;
+  }
+  
+  .auction-item .time-remaining {
+    font-size: 1.1em;
+    font-weight: bold;
+    color: #d9534f;
+    margin-top: 10px;
+  }
+  
+  /* Timer Box */
+  .timer-box {
+    padding: 10px;
+    background-color: #fff;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    font-size: 1.1em;
+    font-weight: bold;
+    text-align: center;
+    margin-top: 15px;
+    width: 80%;
+    margin-bottom: 15px;
+  }
+  
+  /* Button Styles */
+  .button-back {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    background-color: #ff6f00;
+    color: white;
+    padding: 12px 20px;
+    font-size: 1em;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .button-back:hover {
+    background-color: #e67e00;
+  }
+  
+  /* Error Message */
+  .error-message {
+    color: red;
+    font-weight: bold;
+    margin-top: 20px;
+    font-size: 1.2em;
+  }

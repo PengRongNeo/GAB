@@ -181,6 +181,23 @@ function Product() {
 
   return (
     <div className="product-page">
+      <button 
+        onClick={() => navigate('/user-dash')} 
+        style={{ 
+          position: 'absolute', 
+          top: '10px', 
+          left: '10px', 
+          padding: '10px 20px', 
+          color: 'white', 
+          border: 'none', 
+          borderRadius: '5px', 
+          cursor: 'pointer' ,
+          width:100,
+          backgroundColor: 'black'
+        }}
+      >
+        Back
+      </button>
       <header className="product-header">
         <h1>Product List</h1>
         <input

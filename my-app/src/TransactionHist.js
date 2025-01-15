@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { db } from './firebase'; // Firebase config
 import { collection, query, where, getDocs } from 'firebase/firestore';
 import { getAuth } from 'firebase/auth';
+import { useNavigate } from 'react-router-dom';
 
 function TransactionHistory() {
   const [transactions, setTransactions] = useState([]);
@@ -13,6 +14,7 @@ function TransactionHistory() {
 
   const auth = getAuth();
   const currentUser = auth.currentUser;
+  const navigate = useNavigate();
 
   // Fetch transactions from Firestore
   useEffect(() => {
@@ -29,14 +31,16 @@ function TransactionHistory() {
 
         const transactionsList = [];
         querySnapshot.forEach((doc) => {
-          const data = doc.data();
+         const data = doc.data();
           const transaction = {
             id: doc.id,
-            date: data['date/time'], // Firestore Timestamp
+            date: new Date(data.date), // Correctly parse the ISO string to Date object
             products: data.products,
+            total: data.price,
           };
           transactionsList.push(transaction);
         });
+
 
         setTransactions(transactionsList);
         setFilteredTransactions(transactionsList); // Initially show all transactions
@@ -54,13 +58,15 @@ function TransactionHistory() {
   // Filter transactions by date range
   const filterTransactionsByDateRange = (start, end) => {
     const startDate = new Date(start);
+    startDate.setHours(0, 0, 0, 0); // Set start date to the beginning of the day
     const endDate = new Date(end);
+    endDate.setHours(23, 59, 59, 999); // Set end date to the end of the day
     const endDateInclusive = new Date(endDate);
     endDateInclusive.setDate(endDateInclusive.getDate()); // Add one day to include the end date
 
     const filtered = transactions.filter((transaction) => {
-      const transactionDate = new Date(transaction.date.seconds * 1000); // Convert Firestore Timestamp to Date
-      return transactionDate >= startDate && transactionDate < endDateInclusive;
+      const transactionDate = new Date(transaction.date); // Convert Firestore Timestamp to Date
+      return transactionDate >= startDate && transactionDate <= endDateInclusive;
     });
 
     setFilteredTransactions(filtered);
@@ -82,6 +88,24 @@ function TransactionHistory() {
 
   return (
     <div className="transaction-history-fullscreen" style={{ padding: '20px', maxWidth: '90%', margin: '0 auto' }}>
+      {/* Back Button */}
+      <button 
+        onClick={() => navigate('/user-dash')} 
+        style={{ 
+          position: 'absolute', 
+          top: '10px', 
+          left: '10px', 
+          padding: '10px 20px', 
+          color: 'white', 
+          border: 'none', 
+          borderRadius: '5px', 
+          cursor: 'pointer' ,
+          width:100,
+          backgroundColor: 'black'
+        }}
+      >
+        Back
+      </button>
       <h1>Transaction History</h1>
 
       {/* Date Range Filter */}
@@ -118,7 +142,7 @@ function TransactionHistory() {
               <div className="transaction-header">
                 <p>
                   <strong>Date of Purchase:</strong>{' '}
-                  {new Date(transaction.date.seconds * 1000).toLocaleDateString()}
+                  {transaction.date.toLocaleDateString()}
                 </p>
               </div>
               {/* Product List */}
@@ -127,9 +151,10 @@ function TransactionHistory() {
                 <ul>
                   {transaction.products.map((product, index) => (
                     <li key={index}>
-                      <strong>{product.product}</strong>: {product.qty}
+                      <strong>{product.name}</strong>: {product.qty}
                     </li>
                   ))}
+                  <p><strong>{transaction.total}</strong></p>
                 </ul>
               </div>
             </div>

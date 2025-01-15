@@ -48,6 +48,35 @@ function UserDash() {
 
   return (
     <div className="user-dashboard" style={{alignContent: 'center', justifyContent: 'center', alignItems: 'center'}}>
+      <button 
+        onClick={() => navigate('/')} 
+        style={{ 
+          position: 'absolute', 
+          top: '10px', 
+          left: '10px', 
+          color: 'white', 
+          border: 'none', 
+          borderRadius: '5px', 
+          cursor: 'pointer' ,
+          width:100,
+          backgroundColor: 'black'
+        }}
+      >Back</button>
+
+      <button 
+        onClick={() => navigate('/u-auc')} 
+        style={{ 
+          position: 'absolute', 
+          top: '10px', 
+          right: '10px', 
+          color: 'white', 
+          border: 'none', 
+          borderRadius: '5px', 
+          cursor: 'pointer' ,
+          width: 200,
+          backgroundColor: 'blue'
+        }}
+      >Auction</button>
       <header className="dashboard-header" >
         
         <h1>Welcome Back, {userData.name}!</h1>
@@ -63,7 +92,7 @@ function UserDash() {
           ) : (
             <>
               <p><strong>Name:</strong> {userData.name}</p>
-              <p><strong>Wallet Balance:</strong> ${userData.wallet}</p>
+              <p><strong>Wallet Balance:</strong> ${userData.wallet.toFixed(2)}</p>
             </>
           )}
         </div>

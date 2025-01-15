@@ -16,7 +16,7 @@
   
   /* Add this rule to change the title color to black */
   .page-title {
-    color: black;
+    color: rgb(100, 100, 100);
     font-size: 2rem; /* Adjust the size as needed */
     font-weight: bold;
     margin-bottom: 20px;

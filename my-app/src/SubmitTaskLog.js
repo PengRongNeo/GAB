@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import './SubmitTaskLog.css'; // Import CSS for styling
 import { db, auth } from './firebase'; // Import Firebase configuration
 import { collection, addDoc,getDoc,doc, updateDoc } from 'firebase/firestore'; // Firestore methods
+import { useNavigate } from 'react-router-dom';
 
 function SubmitTaskLog() {
   const [description, setDescription] = useState('');
@@ -9,6 +10,7 @@ function SubmitTaskLog() {
   const [submitted, setSubmitted] = useState(false);
 
   const admins = ["Ethan", "Joshua", "Santtosh", "PengRong"];
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -77,6 +79,22 @@ function SubmitTaskLog() {
 
   return (
     <div className="submit-task-log fullscreen">
+      <button 
+        onClick={() => navigate('/user-dash')} 
+        style={{ 
+          position: 'absolute', 
+          top: '10px', 
+          left: '10px', 
+          color: 'white', 
+          border: 'none', 
+          borderRadius: '5px', 
+          cursor: 'pointer' ,
+          width:100,
+          backgroundColor: 'black'
+        }}
+      >
+        Back
+      </button>
       <h1>Submit Task Log</h1>
       <form onSubmit={handleSubmit}>
         <div className="form-group">

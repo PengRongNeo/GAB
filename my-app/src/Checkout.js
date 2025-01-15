@@ -66,6 +66,7 @@ const Checkout = () => {
             qty: cartQty,
           })),
           transactionID,
+          total: totalAmount,
         });
 
         await updateWalletBalance(userId, newBalance);
@@ -85,6 +86,20 @@ const Checkout = () => {
 
   return (
     <div className="checkout-container">
+      <button 
+        onClick={() => navigate('/product')} 
+        style={{ 
+          position: 'absolute', 
+          top: '10px', 
+          left: '10px', 
+          color: 'white', 
+          border: 'none', 
+          borderRadius: '5px', 
+          cursor: 'pointer' ,
+          width:100,
+          backgroundColor: 'black'
+        }}
+      >Back</button>
       <h1>Checkout</h1>
 
       {isOrderPlaced ? (

@@ -8,6 +8,7 @@ import {
   setDoc,
   updateDoc,
 } from 'firebase/firestore';
+import { useNavigate } from 'react-router-dom';
 
 function Notification({ message, type }) {
   if (!message) return null;
@@ -38,6 +39,7 @@ function AdminProductPage() {
   });
   const [error, setError] = useState('');
   const [notification, setNotification] = useState('');
+  const navigate = useNavigate();
 
   // Fetch products from Firestore on mount
   useEffect(() => {
@@ -141,6 +143,20 @@ function AdminProductPage() {
 
   return (
     <div className="product-page full-screen">
+      <button 
+        onClick={() => navigate('/staff-dash')} 
+        style={{ 
+          position: 'absolute', 
+          top: '10px', 
+          left: '10px', 
+          color: 'white', 
+          border: 'none', 
+          borderRadius: '5px', 
+          cursor: 'pointer' ,
+          width:100,
+          backgroundColor: 'black'
+        }}
+      >Back</button>
       <header className="product-header">
         <h1>Admin Product Management</h1>
         <div className="search-filter-container">

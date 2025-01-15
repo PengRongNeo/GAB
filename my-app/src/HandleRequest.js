@@ -2,12 +2,14 @@ import React, { useState, useEffect } from 'react';
 import './HandleRequest.css';
 import { collection, query, getDocs, doc, updateDoc } from 'firebase/firestore';
 import { db } from './firebase'; // Import Firebase configuration
+import { useNavigate } from 'react-router-dom';
 
 const HandleRequest = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [requests, setRequests] = useState([]);
   const [filterBy, setFilterBy] = useState('name'); // Default filter option
   const [modifiedStatuses, setModifiedStatuses] = useState({}); // Track changes
+  const navigate = useNavigate();
 
   useEffect(() => {
     // Fetch requests from Firestore
@@ -87,6 +89,20 @@ const HandleRequest = () => {
 
   return (
     <div className="handle-request full-screen">
+      <button 
+        onClick={() => navigate('/staff-dash')} 
+        style={{ 
+          position: 'absolute', 
+          top: '10px', 
+          left: '10px', 
+          color: 'white', 
+          border: 'none', 
+          borderRadius: '5px', 
+          cursor: 'pointer' ,
+          width:100,
+          backgroundColor: 'black'
+        }}
+      >Back</button>
       <h1 className="page-title">Handle Request</h1>
       <div className="header">
         <input

@@ -4,6 +4,7 @@ import { db, getDoc, doc, updateDoc, increment, collection, getDocs } from './fi
 import { getAuth, sendPasswordResetEmail } from 'firebase/auth'; // Import Firebase Authentication
 import { ToastContainer, toast } from 'react-toastify'; // Import ToastContainer and toast
 import 'react-toastify/dist/ReactToastify.css'; // Import CSS for Toastify
+import { useNavigate } from 'react-router-dom';
 
 const UserManagement = () => {
   const [users, setUsers] = useState([]);
@@ -13,6 +14,7 @@ const UserManagement = () => {
   const [updateAmount, setUpdateAmount] = useState(''); // Track amount to update wallet
   const [error, setError] = useState(''); // To handle any error in the input
   const [selectedUsersData, setSelectedUsersData] = useState([]); // Store the data of selected users
+  const navigate = useNavigate();
 
   useEffect(() => {
     // Fetch users from Firestore
@@ -216,6 +218,20 @@ const UserManagement = () => {
 
   return (
     <div className="user-management-container">
+      <button 
+        onClick={() => navigate('/staff-dash')} 
+        style={{ 
+          position: 'absolute', 
+          top: '10px', 
+          left: '10px', 
+          color: 'white', 
+          border: 'none', 
+          borderRadius: '5px', 
+          cursor: 'pointer' ,
+          width:100,
+          backgroundColor: 'black'
+        }}
+      >Back</button>
       {/* Title */}
       <h1 className="page-title">User Management</h1>
 
@@ -260,7 +276,7 @@ const UserManagement = () => {
                 </td>
                 <td>{user.name}</td>
                 <td>{user.email}</td>
-                <td>{user.wallet}</td>
+                <td>{user.wallet.toFixed(2)}</td>
                 <td>{user.isSuspended ? 'Suspended' : 'Active'}</td>
               </tr>
             ))}

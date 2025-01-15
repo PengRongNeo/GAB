@@ -78,7 +78,7 @@ function StaffDash() {
 
         <div className="section-card">
           <h2>Handle Requests</h2>
-          <p>View and handle incoming requests from customers.</p>
+          <p>View and handle incoming item requests from users.</p>
           <button
             className="custom-button"
             onClick={() => handleNavigation('handle-req')}
@@ -89,7 +89,7 @@ function StaffDash() {
 
         <div className="section-card">
           <h2>User Management</h2>
-          <p>Manage users, roles, and account settings.</p>
+          <p>Manage users and account settings.</p>
           <button
             className="custom-button"
             onClick={() => handleNavigation('user-management')}
@@ -100,7 +100,7 @@ function StaffDash() {
 
         <div className="section-card">
           <h2>Task Management</h2>
-          <p>View and manage tasks assigned to staff members.</p>
+          <p>View and manage tasks submitted by users.</p>
           <button
             className="custom-button"
             onClick={() => handleNavigation('task-manage')}

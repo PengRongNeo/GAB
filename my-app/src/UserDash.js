@@ -100,7 +100,7 @@ function UserDash() {
         {/* Grid Sections for Other Actions */}
         <div className="section-card">
           <h2>Products</h2>
-          <p>View and manage products.</p>
+          <p>View available products.</p>
           <button
             className="custom-button"
             onClick={() => handleNavigation('product')}

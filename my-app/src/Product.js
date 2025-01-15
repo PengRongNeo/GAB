@@ -14,7 +14,6 @@ function Product() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Fetch products from Firestore on component mount
     const fetchProducts = async () => {
       try {
         const querySnapshot = await getDocs(collection(db, 'products'));
@@ -27,8 +26,30 @@ function Product() {
         console.error('Error fetching products: ', error);
       }
     };
+  
+    const fetchCart = async () => {
+      const userId = auth.currentUser?.uid; // Retrieve user ID
+      if (!userId) {
+        console.error('User not authenticated');
+        return; // Stop execution if the user is not authenticated
+      }
+  
+      const userRef = doc(db, 'users', userId);
+      try {
+        const userDoc = await getDoc(userRef);
+        if (userDoc.exists()) {
+          const userCart = userDoc.data().cart || [];
+          setCart(userCart);
+        }
+      } catch (error) {
+        console.error('Error fetching cart: ', error);
+      }
+    };
+  
     fetchProducts();
+    fetchCart();
   }, []); // Empty dependency array ensures this runs once on mount
+  
 
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -94,9 +115,30 @@ function Product() {
     );
   };
 
-  const handleRemoveFromCart = (productId) => {
-    setCart((prevCart) => prevCart.filter((item) => item.id !== productId));
+  const handleRemoveFromCart = async (productId) => {
+    const updatedCart = cart.filter((item) => item.id !== productId);
+    setCart(updatedCart);
+  
+    // Retrieve the current user's ID (uid)
+    const userId = auth.currentUser?.uid;
+  
+    if (!userId) {
+      console.error('User not authenticated');
+      return; // Stop execution if the user is not authenticated
+    }
+  
+    try {
+      const userRef = doc(db, 'users', userId);
+  
+      // Update the cart in Firebase
+      await updateDoc(userRef, {
+        cart: updatedCart,
+      });
+    } catch (error) {
+      console.error('Error updating cart in Firebase: ', error);
+    }
   };
+  
 
   const handleRequestProduct = async () => {
     if (!requestedProduct.trim()) {

@@ -98,7 +98,31 @@ export const getUserWalletBalance = async (uid) => {
     return 0; // Return 0 if there's no authenticated user
   }
 };
+export const clearCartInFirestore = async (userId) => {
+  try {
+    // Reference the user's document in the 'users' collection
+    const userRef = doc(db, "users", userId);
 
+    // Update the cart field to an empty array
+    await updateDoc(userRef, { cart: [] });
+
+    console.log("Cart cleared successfully in Firestore");
+  } catch (error) {
+    console.error("Error clearing cart in Firestore:", error);
+    throw error;
+  }
+};
+
+export const addTransactionToFirestore = async (transaction) => {
+  try {
+    const transactionRef = collection(db, "transactionhist");
+    await addDoc(transactionRef, transaction);
+    console.log("Transaction added successfully:", transaction);
+  } catch (error) {
+    console.error("Error adding transaction to Firestore:", error);
+    throw error;
+  }
+};
 
 
 

@@ -55,10 +55,12 @@ function TransactionHistory() {
   const filterTransactionsByDateRange = (start, end) => {
     const startDate = new Date(start);
     const endDate = new Date(end);
+    const endDateInclusive = new Date(endDate);
+    endDateInclusive.setDate(endDateInclusive.getDate()); // Add one day to include the end date
 
     const filtered = transactions.filter((transaction) => {
       const transactionDate = new Date(transaction.date.seconds * 1000); // Convert Firestore Timestamp to Date
-      return transactionDate >= startDate && transactionDate <= endDate;
+      return transactionDate >= startDate && transactionDate < endDateInclusive;
     });
 
     setFilteredTransactions(filtered);
@@ -102,7 +104,7 @@ function TransactionHistory() {
             onChange={(e) => setEndDate(e.target.value)}
           />
         </div>
-        <button onClick={handleDateChange} style={{ padding: '10px 20px' }}>
+        <button onClick={handleDateChange} style={{ padding: 10, margin: 20, backgroundColor: 'grey', color: 'white'}}>
           Apply Filter
         </button>
       </div>

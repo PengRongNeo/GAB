@@ -59,6 +59,10 @@ function Product() {
   const [error, setError] = useState('');
   const [requestedProduct, setRequestedProduct] = useState('');
 
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
   const handleSearch = (e) => {
     setSearchTerm(e.target.value);
   };
@@ -70,6 +74,7 @@ function Product() {
     }
     setCart((prevCart) => [...prevCart, product]);
     setError('');
+    scrollToTop(); // Scroll to the top when a product is added to the cart
   };
 
   const handleRequestProduct = () => {
@@ -79,6 +84,7 @@ function Product() {
     }
     alert(`Request submitted for: ${requestedProduct}`);
     setRequestedProduct(''); // Clear the input field
+    scrollToTop(); // Scroll to the top when a request is submitted
   };
 
   const filteredProducts = productsData.filter((product) =>
@@ -101,7 +107,7 @@ function Product() {
       {error && <p className="error-message">{error}</p>}
 
       <div className="product-container">
-        <div className="product-list">
+        <div className="product-list" style={{padding: 50}}>
           {filteredProducts.map((product) => (
             <div
               key={product.id}
@@ -139,16 +145,17 @@ function Product() {
         </div>
       </div>
 
-      <div className="request-product">
-        <h2>Request a Product</h2>
+      <div className="request-product" style={{alignItems: 'center'}}>
+        <h2 style={{marginLeft: 10}}>Request a Product</h2>
         <input
           type="text"
           placeholder="Enter product name..."
           value={requestedProduct}
           onChange={(e) => setRequestedProduct(e.target.value)}
           className="request-input"
+          style={{width: 500, marginLeft: 10}}
         />
-        <button onClick={handleRequestProduct} className="request-button">
+        <button onClick={handleRequestProduct} className="request-button" style={{margin: 10}}>
           Request Product
         </button>
       </div>

@@ -1,84 +1,73 @@
-/* SubmitTaskLog.css */
+.submit-task-log.fullscreen {
+  width: 100vw;
+  height: 100vh;
+  padding: 40px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: #f9f9f9;
+}
 
-/* General container styling */
-.submit-task-log {
-    max-width: 600px;
-    margin: 0 auto;
-    padding: 20px;
-    background-color: #f9f9f9;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    font-family: Arial, sans-serif;
-  }
-  
-  /* Form header styling */
-  .submit-task-log h1 {
-    font-size: 24px;
-    margin-bottom: 20px;
-    color: #333;
-    text-align: center;
-  }
-  
-  /* Form group styling */
-  .form-group {
-    margin-bottom: 15px;
-  }
-  
-  /* Label styling */
-  .form-group label {
-    display: block;
-    font-weight: bold;
-    margin-bottom: 5px;
-    color: #555;
-  }
-  
-  /* Textarea styling */
-  .form-group textarea {
-    width: 100%;
-    height: 80px;
-    padding: 10px;
-    font-size: 14px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    resize: vertical;
-  }
-  
-  /* Select dropdown styling */
-  .form-group select {
-    width: 100%;
-    padding: 10px;
-    font-size: 14px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    background-color: #fff;
-  }
-  
-  /* Button styling */
-  .submit-button {
-    width: 100%;
-    padding: 10px 15px;
-    font-size: 16px;
-    font-weight: bold;
-    color: #fff;
-    background-color: #007bff;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-  }
-  
-  .submit-button:disabled {
-    background-color: #6c757d;
-    cursor: not-allowed;
-  }
-  
-  .submit-button:hover:not(:disabled) {
-    background-color: #0056b3;
-  }
-  
-  /* Placeholder text */
-  textarea::placeholder,
-  select::placeholder {
-    color: #999;
-  }
-  
+.submit-task-log h1 {
+  font-size: 2.5rem;
+  margin-bottom: 20px;
+}
+
+.submit-task-log form {
+  width: 100%;
+  max-width: 800px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+textarea {
+  width: 100%;
+  height: 100px;
+  padding: 10px;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  resize: none;
+}
+
+.checkbox-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+}
+
+.checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.submit-button {
+  width: 100%;
+  padding: 15px;
+  font-size: 1.2rem;
+  color: #fff;
+  background-color: #007bff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.submit-button:disabled {
+  background-color: #6c757d;
+  cursor: not-allowed;
+}
+
+.submit-button:hover:not(:disabled) {
+  background-color: #0056b3;
+}

@@ -38,7 +38,7 @@ const HandleRequest = () => {
   };
 
   return (
-    <div className="handle-request">
+    <div className="handle-request full-screen">
       <h1 className="page-title">Handle Request</h1>
       <div className="header">
         <input
@@ -46,11 +46,12 @@ const HandleRequest = () => {
           placeholder={`Search by ${filterBy}`}
           value={searchTerm}
           onChange={handleSearch}
+          className="search-input"
         />
         <select
           value={filterBy}
           onChange={(e) => setFilterBy(e.target.value)}
-          className="status-select"
+          className="filter-select"
         >
           <option value="name">Filter by Name</option>
           <option value="date">Filter by Date</option>

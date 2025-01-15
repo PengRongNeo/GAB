@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { auth, db, createUserWithEmailAndPassword, signInWithEmailAndPassword } from './firebase'; 
 import { doc, setDoc } from 'firebase/firestore';
 import { useNavigate } from 'react-router-dom'; // Import useNavigate
+import './App.css'; 
 
 function UserPage({ goBack }) {
   const [isSignUp, setIsSignUp] = useState(false);
@@ -68,45 +69,48 @@ function UserPage({ goBack }) {
       <form onSubmit={handleAuth}>
         {isSignUp && (
           <input 
-            type="text" 
-            placeholder="Full Name" 
-            value={name} 
-            onChange={(e) => setName(e.target.value)} 
-            required 
-          />
-        )}
-        
-        <input 
-          type="email" 
-          placeholder="Email" 
-          value={email} 
-          onChange={(e) => setEmail(e.target.value)} 
-          required 
-        />
-        <input 
-          type="password" 
-          placeholder="Password" 
-          value={password} 
-          onChange={(e) => setPassword(e.target.value)} 
-          required 
-        />
-        
-        {isSignUp && (
-          <input 
-            type="password" 
-            placeholder="Confirm Password" 
-            value={confirmPassword} 
-            onChange={(e) => setConfirmPassword(e.target.value)} 
-            required 
-          />
-        )}
+      type="text" 
+      placeholder="Full Name" 
+      value={name} 
+       onChange={(e) => setName(e.target.value)} 
+      required 
+    />
+  )}
+  
+  <input 
+    type="email" 
+    placeholder="Email" 
+    value={email} 
+    onChange={(e) => setEmail(e.target.value)} 
+    required 
+  />
+  <input 
+    type="password" 
+    placeholder="Password" 
+    value={password} 
+    onChange={(e) => setPassword(e.target.value)} 
+    required 
+  />
+  
+  {isSignUp && (
+    <input 
+      type="password" 
+      placeholder="Confirm Password" 
+      value={confirmPassword} 
+      onChange={(e) => setConfirmPassword(e.target.value)} 
+      required 
+    />
+  )}
 
-        <button type="submit" disabled={loading}>
-          {loading ? 'Processing...' : isSignUp ? 'Sign Up' : 'Log In'}
-        </button>
-      </form>
-
-      <button onClick={goBack}>Back to Home</button>
+  <div className="form-buttons">
+    <button type="submit" disabled={loading}>
+      {loading ? 'Processing...' : isSignUp ? 'Sign Up' : 'Log In'}
+    </button>
+    <button type="button" onClick={goBack}>
+      Back to Home
+    </button>
+  </div>
+</form>
 
       <div className="toggle-signup">
         {isSignUp ? (

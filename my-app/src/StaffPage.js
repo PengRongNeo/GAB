@@ -9,7 +9,7 @@ function StaffPage({ goBack }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-  const [name, setName] = useState('');  // Add a name state
+  const [name, setName] = useState(''); // Add a name state
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
@@ -34,13 +34,12 @@ function StaffPage({ goBack }) {
 
         // Store staff info in Firestore with name, staffID, email, and password
         await setDoc(doc(db, 'staff', user.uid), {
-          name: name,  // Store the staff's name
+          name: name, // Store the staff's name
           staffID: staffID,
           email: user.email,
           createdAt: new Date(),
         });
 
-       
         navigate('/staff-dash');
       } catch (err) {
         setError(err.message);
@@ -49,7 +48,7 @@ function StaffPage({ goBack }) {
       // Log In Logic
       try {
         await signInWithEmailAndPassword(auth, email, password);
-     
+
         navigate('/staff-dash');
       } catch (err) {
         setError(err.message);
@@ -70,7 +69,7 @@ function StaffPage({ goBack }) {
           <>
             <input 
               type="text" 
-              placeholder="Name"  // Name input field
+              placeholder="Name" // Name input field
               value={name} 
               onChange={(e) => setName(e.target.value)} 
               required 
@@ -118,12 +117,15 @@ function StaffPage({ goBack }) {
           />
         )}
 
-        <button type="submit" disabled={loading}>
-          {loading ? 'Processing...' : isSignUp ? 'Sign Up' : 'Log In'}
-        </button>
+        <div style={{ marginTop: '20px', display: 'flex', flexDirection: 'column', gap: '10px' }}>
+          <button type="submit" disabled={loading}>
+            {loading ? 'Processing...' : isSignUp ? 'Sign Up' : 'Log In'}
+          </button>
+          <button type="button" onClick={goBack}>
+            Back to Home
+          </button>
+        </div>
       </form>
-
-      <button onClick={goBack}>Back to Home</button>
 
       <div className="toggle-signup">
         {isSignUp ? (

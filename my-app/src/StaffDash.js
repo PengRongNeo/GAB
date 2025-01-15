@@ -15,13 +15,13 @@ function StaffDash() {
       <div className="button-group">
         <button
           className="custom-button"
-          onClick={() => handleNavigation('product-management')}
+          onClick={() => handleNavigation('product-manage')}
         >
           Product Management
         </button>
         <button
           className="custom-button"
-          onClick={() => handleNavigation('handle-requests')}
+          onClick={() => handleNavigation('handle-req')}
         >
           Handle Requests
         </button>

@@ -5,6 +5,10 @@ import UserPage from './UserPage.js';
 import UserDash from './UserDash.js';  // Assuming you created UserDash
 import StaffDash from './StaffDash.js';  // Assuming you created StaffDash
 import TransactionHist from './TransactionHist.js';
+import HandleRequest from './HandleRequest.js';
+import SubmitTaskLog from './SubmitTaskLog.js';
+import Product from './Product.js';
+import AdminProductPage from './ProductMgmt.js';
 
 import './App.css'; // Importing CSS for styling
 
@@ -27,15 +31,12 @@ function App() {
                  <button className="custom-button" onClick={() => setView('user')}>
                    User Portal
                  </button>
-                 <button className="custom-button" onClick={() => setView('test')}>
-                   Test Page
-                 </button>
                </div>
              </div>
            )}
            {view === 'staff' && <StaffPage goBack={() => setView('home')} />}
            {view === 'user' && <UserPage goBack={() => setView('home')} />}
-           {view === 'test' && <TransactionHist goBack={() => setView('home')} />}
+           {view === 'test' && <Product goBack={() => setView('home')} />}
          </div>
         } />
         
@@ -51,8 +52,22 @@ function App() {
         {/* StaffDash route */}
         <Route path="/staff-dash" element={<StaffDash />} /> 
 
-        {/* Test route */}
-        <Route path="/test" element={<TransactionHist />} /> 
+        {/* TransactionHist route */}
+        <Route path="/transHist" element={<TransactionHist />} /> 
+
+        {/* SubmitTaskLog route */}
+        <Route path="/submit-task" element={<SubmitTaskLog />} /> 
+
+        {/* Handle Requests */}
+        <Route path="/handle-req" element={<HandleRequest />} /> 
+
+        {/* Handle Requests */}
+        <Route path="/product" element={<Product />} /> 
+
+        {/* Handle Requests */}
+        <Route path="/product-manage" element={<AdminProductPage />} /> 
+
+
       </Routes>
     </Router>
   );

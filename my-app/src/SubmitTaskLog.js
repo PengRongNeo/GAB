@@ -18,7 +18,6 @@ function SubmitTaskLog() {
       return;
     }
 
-    // Create the TaskLog object
     const newTaskLog = {
       description: description,
       adminSupervised: selectedAdmins,
@@ -26,7 +25,6 @@ function SubmitTaskLog() {
     };
 
     try {
-      // Save TaskLog to Firebase
       const docRef = await addDoc(collection(db, 'taskLogs'), newTaskLog);
       console.log('Task log added with ID:', docRef.id);
 
@@ -50,7 +48,7 @@ function SubmitTaskLog() {
   };
 
   return (
-    <div className="submit-task-log">
+    <div className="submit-task-log fullscreen">
       <h1>Submit Task Log</h1>
       <form onSubmit={handleSubmit}>
         <div className="form-group">

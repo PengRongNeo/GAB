@@ -1,74 +1,98 @@
-/* HandleRequest.css */
+/* Fullscreen adjustments */
+.full-screen {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  box-sizing: border-box;
+  background-color: #f4f4f9;
+}
 
-.handle-request {
-    font-family: Arial, sans-serif;
-    margin: 20px;
-  }
-  
-  .header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 20px;
-  }
-  
-  .header input {
-    padding: 10px;
-    font-size: 16px;
-    width: 300px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-  }
-  
-  .table-container {
-    overflow-x: auto;
-  }
-  
-  .request-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 10px;
-  }
-  
-  .request-table th, .request-table td {
-    padding: 12px;
-    text-align: left;
-    border-bottom: 1px solid #ddd;
-  }
-  
-  .request-table th {
-    background-color: #f4f4f4;
-    color: #333;
-  }
-  
-  .request-table tr:hover {
-    background-color: #f9f9f9;
-  }
-  
-  .request-table .status-select {
-    padding: 5px 10px;
-    font-size: 14px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    background-color: #fff;
-  }
-  
-  .status-unfulfilled {
-    color: red;
-  }
-  
-  .status-pending {
-    color: orange;
-  }
-  
-  .status-fulfilled {
-    color: green;
-  }
-  
-  .no-results {
-    text-align: center;
-    font-style: italic;
-    color: #666;
-    margin-top: 20px;
-  }
-  
+.page-title {
+  text-align: center;
+  font-size: 2.5rem;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.search-input {
+  width: 60%;
+  padding: 10px;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.filter-select {
+  padding: 10px;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.table-container {
+  flex-grow: 1;
+  overflow-y: auto;
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  padding: 10px;
+}
+
+.request-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.request-table th,
+.request-table td {
+  border: 1px solid #ddd;
+  text-align: left;
+  padding: 12px;
+}
+
+.request-table th {
+  background-color: #f4f4f9;
+  font-weight: bold;
+}
+
+.request-table tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+.request-table tr:hover {
+  background-color: #f1f1f1;
+}
+
+.status-select {
+  padding: 5px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.no-results {
+  text-align: center;
+  font-size: 1.2rem;
+  color: #999;
+  margin-top: 20px;
+}
+
+.status-unfulfilled {
+  color: red;
+}
+
+.status-pending {
+  color: orange;
+}
+
+.status-fulfilled {
+  color: green;
+}

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import './Product.css';
+import './ProductMgmt.css';
 
 const initialProductsData = [
   {
@@ -29,6 +29,27 @@ const initialProductsData = [
     price: 5.0,
     qty: 12,
     image: 'https://m.media-amazon.com/images/I/718vM+75UNL.jpg',
+  },
+  {
+    id: 5,
+    name: 'Pen',
+    price: 1.0,
+    qty: 0,
+    image: 'https://www.pilotpen.com.sg/wp-content/uploads/2019/10/Evolt-L.jpg',
+  },
+  {
+    id: 6,
+    name: 'Milk',
+    price: 1.8,
+    qty: 4,
+    image: 'https://myras.com.sg/cdn/shop/products/MEIJI_Fresh_Milk_2L.jpg?v=1622560346',
+  },
+  {
+    id: 7,
+    name: 'Chips',
+    price: 2.0,
+    qty: 7,
+    image: 'https://m.media-amazon.com/images/I/81TWeuyzk3L._SL1500_.jpg',
   },
 ];
 
@@ -85,7 +106,7 @@ function AdminProductPage() {
   );
 
   return (
-    <div className="product-page">
+    <div className="product-page full-screen">
       <header className="product-header">
         <h1>Admin Product Management</h1>
         <input
@@ -100,26 +121,29 @@ function AdminProductPage() {
       {error && <p className="error-message">{error}</p>}
 
       <div className="product-container">
+        <div>
+        <h2>Product List</h2>
+        
         <div className="product-list">
-          <h2>Product List</h2>
-          {filteredProducts.map((product) => (
-            <div
-              key={product.id}
-              className={`product-box ${product.qty < 5 ? 'low-stock' : ''}`}
-            >
-              <img
-                src={product.image}
-                alt={product.name}
-                className="product-image"
-              />
-              <h3>{product.name}</h3>
-              <p>Price: ${product.price}</p>
-              <p>Quantity: {product.qty}</p>
-            </div>
-          ))}
+          
+            {filteredProducts.map((product) => (
+              <div
+                key={product.id}
+                className={`product-box ${product.qty < 5 ? 'low-stock' : ''}`}
+              >
+                <img
+                  src={product.image}
+                  alt={product.name}
+                  className="product-image"
+                />
+                <h3>{product.name}</h3>
+                <p>Price: ${product.price.toFixed(2)}</p>
+                <p>Quantity: {product.qty}</p>
+              </div>
+            ))}
+          </div>
         </div>
-
-        <div className="add-product">
+        <div className="add-product" style={{paddingRight:20}}>
           <h2>Add New Product</h2>
           <form onSubmit={handleAddProduct}>
             <input
@@ -129,6 +153,7 @@ function AdminProductPage() {
               value={newProduct.name}
               onChange={handleInputChange}
               className="form-input"
+              style={{width: 300}}
             />
             <input
               type="text"
@@ -137,6 +162,7 @@ function AdminProductPage() {
               value={newProduct.price}
               onChange={handleInputChange}
               className="form-input"
+              style={{width: 300}}
             />
             <input
               type="text"
@@ -145,6 +171,7 @@ function AdminProductPage() {
               value={newProduct.qty}
               onChange={handleInputChange}
               className="form-input"
+              style={{width: 300}}
             />
             <input
               type="text"
@@ -153,14 +180,18 @@ function AdminProductPage() {
               value={newProduct.image}
               onChange={handleInputChange}
               className="form-input"
+              style={{width: 300}}
             />
-            <button type="submit" className="add-button">
+            <button type="submit" className="add-button" >
               Add Product
             </button>
           </form>
         </div>
+        </div>
+
+        
       </div>
-    </div>
+
   );
 }
 

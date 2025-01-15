@@ -1,6 +1,6 @@
 import { initializeApp } from "firebase/app";
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, sendPasswordResetEmail } from "firebase/auth"; // Import sendPasswordResetEmail
-import { getFirestore, collection, doc, setDoc, updateDoc, getDoc, getDocs, increment} from "firebase/firestore";
+import { getFirestore, collection, doc, setDoc, updateDoc, getDoc, getDocs, increment, addDoc} from "firebase/firestore";
 import { getAnalytics } from "firebase/analytics";
 
 // Your Firebase configuration
@@ -118,4 +118,5 @@ export {
   getDocs,
   collection,
   increment,
+  addDoc
 };

@@ -17,9 +17,9 @@ const UserManagement = () => {
   useEffect(() => {
     // Fetch users from Firestore
     getDocs(collection(db, 'users')).then((querySnapshot) => {
-      const usersData = querySnapshot.docs.map(doc => ({
+      const usersData = querySnapshot.docs.map((doc) => ({
         id: doc.id,
-        ...doc.data()
+        ...doc.data(),
       }));
       setUsers(usersData);
     });
@@ -33,13 +33,13 @@ const UserManagement = () => {
     if (selectedUsers.length === users.length) {
       setSelectedUsers([]); // Deselect all
     } else {
-      setSelectedUsers(users.map(user => user.id)); // Select all
+      setSelectedUsers(users.map((user) => user.id)); // Select all
     }
   };
 
   const handleUserSelect = (userId) => {
     if (selectedUsers.includes(userId)) {
-      setSelectedUsers(selectedUsers.filter(id => id !== userId)); // Deselect user
+      setSelectedUsers(selectedUsers.filter((id) => id !== userId)); // Deselect user
     } else {
       setSelectedUsers([...selectedUsers, userId]); // Select user
     }
@@ -52,19 +52,19 @@ const UserManagement = () => {
     }
 
     // Fetch the data for all selected users
-    const selectedUsersDocs = selectedUsers.map(userId => {
-      return getDoc(doc(db, 'users', userId)).then(docSnapshot => ({
+    const selectedUsersDocs = selectedUsers.map((userId) =>
+      getDoc(doc(db, 'users', userId)).then((docSnapshot) => ({
         id: docSnapshot.id,
         ...docSnapshot.data(),
-      }));
-    });
+      }))
+    );
 
     Promise.all(selectedUsersDocs)
-      .then(usersData => {
+      .then((usersData) => {
         setSelectedUsersData(usersData); // Store the selected users' data
         setIsModalOpen(true); // Open the modal to edit wallet
       })
-      .catch(err => {
+      .catch((err) => {
         console.error('Error fetching user data:', err);
         setError('Error fetching user data. Please try again.');
       });
@@ -83,7 +83,7 @@ const UserManagement = () => {
     }
 
     // Update the wallet for all selected users
-    const updatePromises = selectedUsers.map(userId => {
+    const updatePromises = selectedUsers.map((userId) => {
       const userDocRef = doc(db, 'users', userId);
       return updateDoc(userDocRef, {
         wallet: increment(isAdd ? amount : -amount), // Add or subtract the entered amount
@@ -103,7 +103,56 @@ const UserManagement = () => {
       });
   };
 
-  // Handle reset password for selected users
+  const handleSuspendUsers = () => {
+    if (selectedUsers.length === 0) {
+      setError('Please select at least one user to suspend.');
+      return;
+    }
+
+    const suspendPromises = selectedUsers.map((userId) => {
+      const userDocRef = doc(db, 'users', userId);
+      return updateDoc(userDocRef, {
+        isSuspended: true, // Set suspension status
+      });
+    });
+
+    Promise.all(suspendPromises)
+      .then(() => {
+        console.log(`Users suspended: ${selectedUsers.join(', ')}`);
+        toast.success('Selected users have been suspended.', { position: 'top-center', autoClose: 3000 });
+        setSelectedUsers([]); // Clear selection
+      })
+      .catch((error) => {
+        console.error('Error suspending users:', error);
+        setError('Error suspending users. Please try again.');
+      });
+  };
+
+  const handleUnsuspendUsers = () => {
+    if (selectedUsers.length === 0) {
+      setError('Please select at least one user to unsuspend.');
+      return;
+    }
+
+    const unsuspendPromises = selectedUsers.map((userId) => {
+      const userDocRef = doc(db, 'users', userId);
+      return updateDoc(userDocRef, {
+        isSuspended: false, // Reset suspension status
+      });
+    });
+
+    Promise.all(unsuspendPromises)
+      .then(() => {
+        console.log(`Users unsuspended: ${selectedUsers.join(', ')}`);
+        toast.success('Selected users have been unsuspended.', { position: 'top-center', autoClose: 3000 });
+        setSelectedUsers([]); // Clear selection
+      })
+      .catch((error) => {
+        console.error('Error unsuspending users:', error);
+        setError('Error unsuspending users. Please try again.');
+      });
+  };
+
   const handleResetPassword = () => {
     if (selectedUsers.length !== 1) {
       setError('Please select exactly one user to reset the password.');
@@ -125,24 +174,24 @@ const UserManagement = () => {
               console.log(`Password reset email sent to ${email}`);
               setError('');
               toast.success('Password reset email sent successfully!', {
-                position: 'top-center', // Centered toast
+                position: 'top-center',
                 autoClose: 5000,
                 hideProgressBar: true,
                 closeButton: false,
                 draggable: true,
-                theme: 'colored', // Optional: You can customize the theme (light, dark, colored)
+                theme: 'colored',
               });
             })
             .catch((error) => {
               console.error('Error sending reset email:', error);
               setError('Error sending reset email. Please try again.');
               toast.error('Error sending reset email. Please try again.', {
-                position: 'top-center', // Centered toast
+                position: 'top-center',
                 autoClose: 5000,
                 hideProgressBar: true,
                 closeButton: false,
                 draggable: true,
-                theme: 'colored', // Optional: You can customize the theme (light, dark, colored)
+                theme: 'colored',
               });
             });
         }
@@ -151,17 +200,17 @@ const UserManagement = () => {
         console.error('Error fetching user data:', error);
         setError('Error fetching user data. Please try again.');
         toast.error('Error fetching user data. Please try again.', {
-          position: 'top-center', // Centered toast
+          position: 'top-center',
           autoClose: 5000,
           hideProgressBar: true,
           closeButton: false,
           draggable: true,
-          theme: 'colored', // Optional: You can customize the theme (light, dark, colored)
+          theme: 'colored',
         });
       });
   };
 
-  const filteredUsers = users.filter(user =>
+  const filteredUsers = users.filter((user) =>
     user.name.toLowerCase().includes(searchTerm)
   );
 
@@ -196,10 +245,11 @@ const UserManagement = () => {
               <th>Name</th>
               <th>Email</th>
               <th>Wallet</th>
+              <th>Status</th>
             </tr>
           </thead>
           <tbody>
-            {filteredUsers.map(user => (
+            {filteredUsers.map((user) => (
               <tr key={user.id}>
                 <td>
                   <input
@@ -211,6 +261,7 @@ const UserManagement = () => {
                 <td>{user.name}</td>
                 <td>{user.email}</td>
                 <td>{user.wallet}</td>
+                <td>{user.isSuspended ? 'Suspended' : 'Active'}</td>
               </tr>
             ))}
           </tbody>
@@ -224,7 +275,12 @@ const UserManagement = () => {
         <button className="action-button" onClick={handleResetPassword}>
           Reset Password
         </button>
-        <button className="action-button">Suspend User</button>
+        <button className="action-button" onClick={handleSuspendUsers}>
+          Suspend User
+        </button>
+        <button className="action-button" onClick={handleUnsuspendUsers}>
+          Unsuspend User
+        </button>
       </div>
 
       {/* Modal for Edit Wallet */}
@@ -232,7 +288,6 @@ const UserManagement = () => {
         <div className="modal-overlay">
           <div className="modal-content">
             <h2>Edit Wallet for {selectedUsersData.length} Users</h2>
-            {/* Removed current wallet balance display */}
             <input
               type="text"
               value={updateAmount}

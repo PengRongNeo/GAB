@@ -1,19 +1,19 @@
 import React, { useState } from 'react';
 import { auth, db, createUserWithEmailAndPassword, signInWithEmailAndPassword } from './firebase'; 
-import { doc, setDoc } from 'firebase/firestore';
-import { useNavigate } from 'react-router-dom'; // Import useNavigate
-import './App.css'; 
+import { doc, setDoc, getDoc } from 'firebase/firestore'; // Import getDoc for fetching user data
+import { useNavigate } from 'react-router-dom';
+import './App.css';
 
 function UserPage({ goBack }) {
   const [isSignUp, setIsSignUp] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-  const [name, setName] = useState('');  // Add a name input
+  const [name, setName] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   
-  const navigate = useNavigate(); // Initialize useNavigate
+  const navigate = useNavigate();
 
   const handleAuth = async (e) => {
     e.preventDefault();
@@ -32,26 +32,40 @@ function UserPage({ goBack }) {
         const userCredential = await createUserWithEmailAndPassword(auth, email, password);
         const user = userCredential.user;
 
-        // Store user info in Firestore with additional attributes
+        // Store user info in Firestore
         await setDoc(doc(db, 'users', user.uid), {
           email: user.email,
-          name: name,  // Store the user's name
-          wallet: 0,  // Initialize wallet balance as 0
-          cart: [],  // Initialize cart as an empty list
-          preorder: [],  // Initialize preorder as an empty list
+          name: name,
+          wallet: 0,
+          cart: [],
+          preorder: [],
+          isSuspended: false, // Initialize account as not suspended
         });
 
-    
-        navigate('/user-dash'); // Redirect to UserDash page after signup
+        navigate('/user-dash');
       } catch (err) {
         setError(err.message);
       }
     } else {
       // Log In Logic
       try {
-        await signInWithEmailAndPassword(auth, email, password);
+        const userCredential = await signInWithEmailAndPassword(auth, email, password);
+        const user = userCredential.user;
 
-        navigate('/user-dash'); // Redirect to UserDash page after login
+        // Fetch user data from Firestore
+        const userDoc = await getDoc(doc(db, 'users', user.uid));
+        if (userDoc.exists()) {
+          const userData = userDoc.data();
+
+          if (userData.isSuspended) {
+            setError('Your account has been suspended.');
+            await auth.signOut(); // Sign the user out immediately
+          } else {
+            navigate('/user-dash');
+          }
+        } else {
+          setError('User data not found.');
+        }
       } catch (err) {
         setError(err.message);
       }
@@ -69,48 +83,46 @@ function UserPage({ goBack }) {
       <form onSubmit={handleAuth}>
         {isSignUp && (
           <input 
-      type="text" 
-      placeholder="Full Name" 
-      value={name} 
-       onChange={(e) => setName(e.target.value)} 
-      required 
-    />
-  )}
-  
-  <input 
-    type="email" 
-    placeholder="Email" 
-    value={email} 
-    onChange={(e) => setEmail(e.target.value)} 
-    required 
-  />
-  <input 
-    type="password" 
-    placeholder="Password" 
-    value={password} 
-    onChange={(e) => setPassword(e.target.value)} 
-    required 
-  />
-  
-  {isSignUp && (
-    <input 
-      type="password" 
-      placeholder="Confirm Password" 
-      value={confirmPassword} 
-      onChange={(e) => setConfirmPassword(e.target.value)} 
-      required 
-    />
-  )}
+            type="text" 
+            placeholder="Full Name" 
+            value={name} 
+            onChange={(e) => setName(e.target.value)} 
+            required 
+          />
+        )}
+        <input 
+          type="email" 
+          placeholder="Email" 
+          value={email} 
+          onChange={(e) => setEmail(e.target.value)} 
+          required 
+        />
+        <input 
+          type="password" 
+          placeholder="Password" 
+          value={password} 
+          onChange={(e) => setPassword(e.target.value)} 
+          required 
+        />
+        {isSignUp && (
+          <input 
+            type="password" 
+            placeholder="Confirm Password" 
+            value={confirmPassword} 
+            onChange={(e) => setConfirmPassword(e.target.value)} 
+            required 
+          />
+        )}
 
-  <div className="form-buttons">
-    <button type="submit" disabled={loading}>
-      {loading ? 'Processing...' : isSignUp ? 'Sign Up' : 'Log In'}
-    </button>
-    <button type="button" onClick={goBack}>
-      Back to Home
-    </button>
-  </div>
-</form>
+        <div className="form-buttons">
+          <button type="submit" disabled={loading}>
+            {loading ? 'Processing...' : isSignUp ? 'Sign Up' : 'Log In'}
+          </button>
+          <button type="button" onClick={goBack}>
+            Back to Home
+          </button>
+        </div>
+      </form>
 
       <div className="toggle-signup">
         {isSignUp ? (
@@ -124,3 +136,4 @@ function UserPage({ goBack }) {
 }
 
 export default UserPage;
+

@@ -1,7 +1,7 @@
 // firebase.js
 import { initializeApp } from "firebase/app";
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
-import { getFirestore, collection, doc, setDoc, updateDoc, getDoc, getDocs } from "firebase/firestore";
+import { getFirestore, collection, doc, setDoc, updateDoc, getDoc, getDocs, increment} from "firebase/firestore";
 import { getAnalytics } from "firebase/analytics";
 
 // Your Firebase configuration
@@ -76,4 +76,5 @@ export {
   getDoc,
   getDocs,
   collection,
+  increment,
 };

@@ -132,3 +132,105 @@
     transform: none;
   }
   
+ /* Modal Overlay */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    transition: opacity 0.3s ease;
+  }
+  
+  .modal-content {
+    background-color: white;
+    border-radius: 8px;
+    padding: 20px;
+    width: 400px;
+    max-width: 100%;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+  }
+  
+  .modal-content h2 {
+    margin-bottom: 20px;
+    font-size: 1.5em;
+    color: #333;
+  }
+  
+  .modal-content p {
+    margin-bottom: 15px;
+    font-size: 1.1em;
+    color: #666;
+  }
+  
+  .voucher-input {
+    width: 80%; /* Reduced width for a more centered look */
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 1.1em;
+    text-align: center;
+    margin-left: auto; /* Center the text input */
+    margin-right: auto; /* Center the text input */
+  }
+  
+  .voucher-input:focus {
+    outline: none;
+    border-color: #007bff;
+  }
+  
+  .error-message {
+    color: red;
+    font-size: 0.9em;
+  }
+  
+  .modal-actions {
+    display: flex;
+    justify-content: space-between; /* Space between buttons */
+    margin-top: 15px;
+  }
+  
+  .add-button, .deduct-button, .cancel-button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    font-size: 1.1em;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    width: 30%; /* Ensure buttons have equal width */
+  }
+  
+  .add-button {
+    background-color: #4CAF50;
+    color: white;
+  }
+  
+  .deduct-button {
+    background-color: #f44336;
+    color: white;
+  }
+  
+  .cancel-button {
+    background-color: #bbb;
+    color: white;
+  }
+  
+  .add-button:hover {
+    background-color: #45a049;
+  }
+  
+  .deduct-button:hover {
+    background-color: #e53935;
+  }
+  
+  .cancel-button:hover {
+    background-color: #999;
+  }
+  

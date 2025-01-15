@@ -10,6 +10,7 @@ import SubmitTaskLog from './SubmitTaskLog.js';
 import Product from './Product.js';
 import AdminProductPage from './ProductMgmt.js';
 import UserManagement from './UserManagement';  // Create this component
+import Checkout from './Checkout.js';
 
 import './App.css'; // Importing CSS for styling
 
@@ -40,6 +41,8 @@ function App() {
            {view === 'test' && <Product goBack={() => setView('home')} />}
          </div>
         } />
+
+        
         
         {/* StaffPage route */}
         <Route path="/staff" element={<StaffPage />} />
@@ -69,11 +72,15 @@ function App() {
         <Route path="/product-manage" element={<AdminProductPage />} /> 
 
         <Route path="/user-management" element={<UserManagement />} />
+        {/* Handle Requests */}
+        <Route path="/checkout" element={<Checkout />} /> 
+        
 
 
       </Routes>
     </Router>
   );
+  
 }
 
 export default App;

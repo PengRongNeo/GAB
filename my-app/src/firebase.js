@@ -1,7 +1,7 @@
-// Import the functions you need from the Firebase SDKs
+// firebase.js
 import { initializeApp } from "firebase/app";
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
-import { getFirestore, collection, getDocs } from "firebase/firestore";
+import { getFirestore, collection, doc, setDoc, updateDoc, getDoc, getDocs } from "firebase/firestore";
 import { getAnalytics } from "firebase/analytics";
 
 // Your Firebase configuration
@@ -24,4 +24,56 @@ const db = getFirestore(app);
 const analytics = getAnalytics(app); // Optional Analytics
 
 // Export the services and functions for use in other files
-export { auth, db, createUserWithEmailAndPassword, signInWithEmailAndPassword, collection, getDocs };
+
+
+// Firestore utility functions
+const getCartFromFirestore = async (userId) => {
+  const userDocRef = doc(db, "users", userId);
+  const userDoc = await getDoc(userDocRef);
+  if (userDoc.exists()) {
+    return userDoc.data().cart || [];
+  }
+  return [];
+};
+
+const updateCartInFirestore = async (userId, cart) => {
+  const userDocRef = doc(db, "users", userId);
+  
+  try {
+    await updateDoc(userDocRef, {
+      cart: cart
+    });
+    console.log("Cart updated successfully!");
+  } catch (error) {
+    console.error("Error updating cart: ", error);
+  }
+};
+
+ // In firebase.js
+export const updateWalletBalance = async (userId, newBalance) => {
+  try {
+    await db.collection("users").doc(userId).update({
+      wallet: newBalance,
+    });
+  } catch (error) {
+    console.error("Error updating wallet balance: ", error);
+  }
+};
+
+
+// Export all the necessary services and functions
+export {
+  auth,
+  db,
+  analytics,
+  doc,
+  updateDoc,
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+  getCartFromFirestore,
+  updateCartInFirestore,
+  setDoc,
+  getDoc,
+  getDocs,
+  collection,
+};

@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import './Product.css';
 import { collection, addDoc } from 'firebase/firestore';
-import { db } from './firebase';  // Import Firebase configuration
+import { useNavigate } from 'react-router-dom'; // Import useNavigate for navigation
+import { db, doc, updateDoc, auth, getDoc, setDoc} from './firebase'; // Adjust path as needed
 
 const productsData = [
   {
@@ -61,6 +62,7 @@ function Product() {
   const [error, setError] = useState('');
   const [requestedProduct, setRequestedProduct] = useState('');
   const [requestMessage, setRequestMessage] = useState('');
+  const navigate = useNavigate();
 
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -70,14 +72,66 @@ function Product() {
     setSearchTerm(e.target.value);
   };
 
-  const handleAddToCart = (product) => {
-    if (product.qty < 1) {
-      setError(`Sorry, ${product.name} is out of stock!`);
+  
+  const handleAddToCart = async (product, quantity) => {
+    if (quantity < 1) {
+      setError('Please select a valid quantity.');
       return;
     }
-    setCart((prevCart) => [...prevCart, product]);
+    if (product.qty < quantity) {
+      setError(`Only ${product.qty} ${product.name}(s) are available in stock!`);
+      return;
+    }
+  
+    setCart((prevCart) => {
+      const existingItemIndex = prevCart.findIndex((item) => item.id === product.id);
+      if (existingItemIndex > -1) {
+        const updatedCart = [...prevCart];
+        updatedCart[existingItemIndex].cartQty += quantity;
+        return updatedCart;
+      }
+      return [...prevCart, { ...product, cartQty: quantity }];
+    });
+  
     setError('');
-    scrollToTop(); // Scroll to the top when a product is added to the cart
+  
+    // Retrieve the current user's ID (uid)
+    const userId = auth.currentUser?.uid;  // Get user ID
+  
+    if (!userId) {
+      console.error('User not authenticated');
+      return;  // Stop execution if the user is not authenticated
+    }
+  
+    const userRef = doc(db, 'users', userId);
+    const userDoc = await getDoc(userRef);
+  
+    if (userDoc.exists()) {
+      // If the document exists, update it
+      await updateDoc(userRef, {
+        cart: [...cart, { ...product, cartQty: quantity }],
+      });
+    } else {
+      // If the document doesn't exist, create it
+      await setDoc(userRef, {
+        cart: [{ ...product, cartQty: quantity }],
+      });
+    }
+  
+    scrollToTop();
+  };
+  
+
+  const handleUpdateCartItem = (productId, quantity) => {
+    setCart((prevCart) =>
+      prevCart.map((item) =>
+        item.id === productId ? { ...item, cartQty: quantity } : item
+      )
+    );
+  };
+
+  const handleRemoveFromCart = (productId) => {
+    setCart((prevCart) => prevCart.filter((item) => item.id !== productId));
   };
 
   const handleRequestProduct = async () => {
@@ -106,6 +160,13 @@ function Product() {
       console.error("Error adding document: ", e);
       setRequestMessage('Failed to submit request.');
     }
+    alert(`Request submitted for: ${requestedProduct}`);
+    setRequestedProduct('');
+    scrollToTop();
+  };
+
+  const handleCheckout = () => {
+    navigate('/checkout', { state: { cart } });  // Passing cart through navigation state
   };
 
   const filteredProducts = productsData.filter((product) =>
@@ -144,8 +205,25 @@ function Product() {
               <h3>{product.name}</h3>
               <p>Price: ${product.price}</p>
               <p>Quantity: {product.qty}</p>
+              <input
+                type="number"
+                min="1"
+                max={product.qty}
+                defaultValue="1"
+                className="quantity-input"
+                style={{ width: 50, marginBottom: 10 }}
+                id={`quantity-${product.id}`}
+              />
               <button
-                onClick={() => handleAddToCart(product)}
+                onClick={() =>
+                  handleAddToCart(
+                    product,
+                    parseInt(
+                      document.getElementById(`quantity-${product.id}`).value,
+                      10
+                    )
+                  )
+                }
                 disabled={product.qty < 1}
               >
                 Add to Cart
@@ -160,10 +238,55 @@ function Product() {
             <p>Your cart is empty</p>
           ) : (
             <ul>
-              {cart.map((item, index) => (
-                <li key={index}>{item.name}</li>
+              {cart.map((item) => (
+                <li
+                  key={item.id}
+                  style={{
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                    padding: '5px 0',
+                  }}
+                >
+                  <div>
+                    <span>{item.name}</span>
+                    <input
+                      type="number"
+                      min="1"
+                      max={item.qty}
+                      value={item.cartQty}
+                      onChange={(e) =>
+                        handleUpdateCartItem(
+                          item.id,
+                          parseInt(e.target.value, 10)
+                        )
+                      }
+                      style={{ width: 50, marginLeft: 10 }}
+                    />
+                  </div>
+                  <button
+                    onClick={() => handleRemoveFromCart(item.id)}
+                    className="remove-button"
+                    style={{
+                      backgroundColor: 'transparent',
+                      border: 'none',
+                      color: 'red',
+                      cursor: 'pointer',
+                      fontSize: '16px',
+                      lineHeight: '1',
+                    }}
+                    aria-label={`Remove ${item.name} from cart`}
+                  >
+                    &times;
+                  </button>
+                </li>
               ))}
             </ul>
+          )}
+          {cart.length > 0 && (
+            <button onClick={handleCheckout} className="checkout-button">
+              Proceed to Checkout
+            </button>
           )}
         </div>
       </div>

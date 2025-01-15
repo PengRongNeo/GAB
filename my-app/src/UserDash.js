@@ -47,9 +47,10 @@ function UserDash() {
   };
 
   return (
-    <div className="user-dashboard">
-      <header className="dashboard-header">
-        <h1>Welcome to the User Dashboard</h1>
+    <div className="user-dashboard" style={{alignContent: 'center', justifyContent: 'center', alignItems: 'center'}}>
+      <header className="dashboard-header" >
+        
+        <h1>Welcome Back, {userData.name}!</h1>
         <p>Choose a section to get started.</p>
       </header>
 

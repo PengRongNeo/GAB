@@ -142,7 +142,7 @@ function TaskManagementPage() {
         <div className="award-points-container" style={{width: 300}} >
           {selectedTaskId && (
             <div className="award-points-form">
-              <h2>Award Points</h2>
+              <h2>Approve Task</h2>
               <input
                 type="number"
                 value={pointsToAward}

@@ -1,31 +1,29 @@
 import React, { useState, useEffect } from "react";
-import { getCartFromFirestore } from "./firebase"; // Import your Firebase function
-import { auth } from "./firebase"; // Make sure to import Firebase Auth
+import { getCartFromFirestore, getUserWalletBalance, updateWalletBalance } from "./firebase"; // Import Firebase functions
+import { auth } from "./firebase"; // Import Firebase Auth
 import "./Checkout.css";
 
 const Checkout = () => {
   const [cartItems, setCartItems] = useState([]);
-  const [selectedVoucher, setSelectedVoucher] = useState(""); // State to hold the selected voucher
+  const [walletBalance, setWalletBalance] = useState(0); // State to hold wallet balance
   const [isModalOpen, setIsModalOpen] = useState(false); // State to control modal visibility
 
-  // Simulate a list of vouchers the user can choose from
-  const vouchers = [
-    { id: "voucher1", name: "10% Discount Voucher" },
-    { id: "voucher2", name: "Free Delivery Voucher" },
-    { id: "voucher3", name: "Buy One Get One Free Voucher" },
-  ];
-
-  // Fetch the user's cart from Firestore
+  // Fetch the user's cart and wallet balance from Firestore
   useEffect(() => {
-    const fetchCart = async () => {
+    const fetchCartAndWallet = async () => {
       const user = auth.currentUser; // Get the current authenticated user
       if (user) {
-        const items = await getCartFromFirestore(user.uid); // Fetch cart items from Firestore
+        // Fetch cart items
+        const items = await getCartFromFirestore(user.uid);
         setCartItems(items); // Set the cart items state
+        
+        // Fetch wallet balance
+        const wallet = await getUserWalletBalance(user.uid);
+        setWalletBalance(wallet); // Set wallet balance
       }
     };
 
-    fetchCart();
+    fetchCartAndWallet();
   }, []); // Empty dependency array, so this runs once when the component mounts
 
   // Calculate total price with validation and conversion
@@ -44,9 +42,26 @@ const Checkout = () => {
       }
     }, 0);
 
-  const handlePlaceOrder = () => {
-    // Trigger modal to show success message
-    setIsModalOpen(true);
+  // Handle order placement
+  const handlePlaceOrder = async () => {
+    const totalAmount = calculateTotal();
+
+    if (walletBalance >= totalAmount) {
+      // Deduct the total amount from the wallet
+      const newBalance = walletBalance - totalAmount;
+
+      // Update the wallet balance in Firestore
+      await updateWalletBalance(auth.currentUser.uid, newBalance);
+
+      // Update the wallet balance state to reflect the new balance
+      setWalletBalance(newBalance);
+
+      // Show modal
+      setIsModalOpen(true);
+    } else {
+      // Display message or do something when wallet balance is insufficient
+      alert("Insufficient balance to place the order.");
+    }
   };
 
   const closeModal = () => {
@@ -93,22 +108,14 @@ const Checkout = () => {
       </div>
 
       <div className="checkout-form">
-        <h2>Select Voucher</h2>
-        <div className="voucher-options">
-          <select
-            value={selectedVoucher}
-            onChange={(e) => setSelectedVoucher(e.target.value)} // Update the selected voucher
-          >
-            <option value="">Select a voucher</option>
-            {vouchers.map((voucher) => (
-              <option key={voucher.id} value={voucher.id}>
-                {voucher.name}
-              </option>
-            ))}
-          </select>
+        <h2>Wallet Balance</h2>
+        <div className="wallet-balance">
+          <p>Your Wallet Balance: ${walletBalance.toFixed(2)}</p>
         </div>
 
-        <button onClick={handlePlaceOrder}>Place Order</button>
+        <button onClick={handlePlaceOrder} disabled={walletBalance < calculateTotal()}>
+          Place Order
+        </button>
       </div>
 
       {/* Modal Popup */}

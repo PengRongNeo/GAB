@@ -60,13 +60,47 @@ export const sendPasswordReset = async (email) => {
 // In firebase.js
 export const updateWalletBalance = async (userId, newBalance) => {
   try {
-    await db.collection("users").doc(userId).update({
+    // Create a reference to the user's document
+    const userRef = doc(db, "users", userId);
+    
+    // Update the wallet field with the new balance
+    await updateDoc(userRef, {
       wallet: newBalance,
     });
+
+    console.log("Wallet balance updated successfully");
   } catch (error) {
     console.error("Error updating wallet balance: ", error);
   }
 };
+
+// Fetch user's wallet balance
+export const getUserWalletBalance = async (uid) => {
+  const currentUser = auth.currentUser; // Get the current authenticated user
+  if (currentUser) {
+    try {
+      const userRef = doc(db, "users", currentUser.uid); // Reference to the user's document in Firestore
+      const userDoc = await getDoc(userRef); // Fetch the document
+      
+      if (userDoc.exists()) {
+        // Return the wallet balance or 0 if the wallet field is not available
+        return userDoc.data().wallet || 0;
+      } else {
+        console.error("User document does not exist");
+        return 0; // Return 0 if user document doesn't exist
+      }
+    } catch (error) {
+      console.error("Error getting user wallet balance:", error);
+      return 0; // Return 0 in case of error
+    }
+  } else {
+    console.error("No authenticated user found");
+    return 0; // Return 0 if there's no authenticated user
+  }
+};
+
+
+
 
 // Export all the necessary services and functions
 export {

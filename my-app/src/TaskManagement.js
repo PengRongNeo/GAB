@@ -168,7 +168,7 @@ function TaskManagementPage() {
               onClick={() => handleTaskSelection(task.id)}
             >
               <p className="task-user"><strong>User:</strong> {task.user || 'Unknown'}</p>
-              <p className="task-admin"><strong>Admin Supervised:</strong> {task.adminSupervised || 'N/A'}</p>
+              <p className="task-admin"><strong>Admin Supervised:</strong>{task.adminSupervised?.join(', ') || 'N/A'}</p>
               <p className="task-description"><strong>Description:</strong> {task.description || 'No description'}</p>
               <p className="task-timestamp"><strong>Timestamp:</strong> {formatTimestamp(task.timestamp)}</p>
             </div>

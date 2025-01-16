@@ -1,69 +1,83 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './SubmitTaskLog.css'; // Import CSS for styling
 import { db, auth } from './firebase'; // Import Firebase configuration
-import { collection, addDoc,getDoc,doc, updateDoc } from 'firebase/firestore'; // Firestore methods
+import { collection, getDocs, doc, getDoc, addDoc, updateDoc } from 'firebase/firestore'; // Firestore methods
 import { useNavigate } from 'react-router-dom';
 
 function SubmitTaskLog() {
   const [description, setDescription] = useState('');
   const [selectedAdmins, setSelectedAdmins] = useState([]);
   const [submitted, setSubmitted] = useState(false);
-
-  const admins = ["Ethan", "Joshua", "Santtosh", "PengRong"];
+  const [admins, setAdmins] = useState([]); // Dynamically loaded admins
   const navigate = useNavigate();
+
+  // Fetch staff data from Firestore
+  useEffect(() => {
+    const fetchAdmins = async () => {
+      try {
+        const staffCollection = collection(db, 'staff');
+        const staffSnapshot = await getDocs(staffCollection);
+        const staffList = staffSnapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
+        setAdmins(staffList.map((staff) => staff.name)); // Assuming 'name' field exists
+      } catch (error) {
+        console.error('Error fetching admins:', error);
+        alert('Failed to fetch staff data. Please try again.');
+      }
+    };
+
+    fetchAdmins();
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
+
     if (!description || selectedAdmins.length === 0) {
       alert('Please fill in all fields before submitting.');
       return;
     }
-  
-    // Get current user info from Firebase Authentication
+
     const currentUser = auth.currentUser;
-  
+
     if (!currentUser) {
       alert('You must be logged in to submit a task.');
       return;
     }
-  
+
     try {
-      // Get the user's data from the Firestore 'users' collection
       const userRef = doc(db, 'users', currentUser.uid);
       const userDoc = await getDoc(userRef);
-  
+
       if (!userDoc.exists()) {
         alert('User not found in Firestore.');
         return;
       }
-  
-      const userName = userDoc.data().name; // Get the user's name from Firestore
-  
+
+      const userName = userDoc.data().name;
+
       const newTaskLog = {
-        description: description,
+        description,
         adminSupervised: selectedAdmins,
         timestamp: new Date().toISOString(),
-        user: userName,  // Store the user's name from Firestore
-        userID: currentUser.uid,  // Store current user's UID for reference
+        user: userName,
+        userID: currentUser.uid,
       };
-  
-      // Add the task log to Firestore
+
       const docRef = await addDoc(collection(db, 'taskLogs'), newTaskLog);
       console.log('Task log added with ID:', docRef.id);
-  
-      // Optionally update the user's data with the last submitted task timestamp
+
       await updateDoc(userRef, {
-        lastSubmittedTask: newTaskLog.timestamp, // Store the timestamp of the last task submitted
+        lastSubmittedTask: newTaskLog.timestamp,
       });
-  
+
       setSubmitted(true);
       setTimeout(() => {
         setSubmitted(false);
         setDescription('');
         setSelectedAdmins([]);
-      }, 1000); // Reset the form after 1 second
-  
+      }, 1000);
     } catch (error) {
       console.error('Error adding task log:', error);
       alert('Failed to submit task log. Please try again.');
@@ -79,18 +93,18 @@ function SubmitTaskLog() {
 
   return (
     <div className="submit-task-log fullscreen">
-      <button 
-        onClick={() => navigate('/user-dash')} 
-        style={{ 
-          position: 'absolute', 
-          top: '10px', 
-          left: '10px', 
-          color: 'white', 
-          border: 'none', 
-          borderRadius: '5px', 
-          cursor: 'pointer' ,
-          width:100,
-          backgroundColor: 'black'
+      <button
+        onClick={() => navigate('/user-dash')}
+        style={{
+          position: 'absolute',
+          top: '10px',
+          left: '10px',
+          color: 'white',
+          border: 'none',
+          borderRadius: '5px',
+          cursor: 'pointer',
+          width: 100,
+          backgroundColor: 'black',
         }}
       >
         Back
@@ -111,17 +125,21 @@ function SubmitTaskLog() {
         <div className="form-group">
           <label htmlFor="admins">Admin Supervised By:</label>
           <div id="admins" className="checkbox-group">
-            {admins.map((admin, index) => (
-              <label key={index} className="checkbox-label">
-                <input
-                  type="checkbox"
-                  value={admin}
-                  checked={selectedAdmins.includes(admin)}
-                  onChange={handleAdminSelection}
-                />
-                {admin}
-              </label>
-            ))}
+            {admins.length > 0 ? (
+              admins.map((admin, index) => (
+                <label key={index} className="checkbox-label">
+                  <input
+                    type="checkbox"
+                    value={admin}
+                    checked={selectedAdmins.includes(admin)}
+                    onChange={handleAdminSelection}
+                  />
+                  {admin}
+                </label>
+              ))
+            ) : (
+              <p>Loading admin options...</p>
+            )}
           </div>
         </div>
 

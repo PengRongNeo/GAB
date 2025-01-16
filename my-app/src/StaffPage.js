@@ -27,7 +27,7 @@ function StaffPage({ goBack }) {
         setLoading(false);
         return;
       }
-      if (staffID != 'MWHSTAFF123') {
+      if (staffID !== 'MWHSTAFF123') {
         setError('Invalid Staff ID!');
         setLoading(false);
         return;

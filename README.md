@@ -30,6 +30,7 @@ Start the application
 	npm start
 # 3. Usage
 Option 1: Run the application remotely on local Server
+
 Option 2: Follow Link to Deployed App, https://muhamaddiyah-minimart.netlify.app/ 
 
 # 4. Features

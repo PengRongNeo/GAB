@@ -27,7 +27,12 @@ function StaffPage({ goBack }) {
         setLoading(false);
         return;
       }
-
+      if (staffID != 'MWHSTAFF123') {
+        setError('Invalid Staff ID!');
+        setLoading(false);
+        return;
+      }
+      
       try {
         const userCredential = await createUserWithEmailAndPassword(auth, email, password);
         const user = userCredential.user;

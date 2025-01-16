@@ -31,7 +31,7 @@ function App() {
              <div className="home">
              <h1 className="title">
                Welcome to <br />
-               <span>MWH Minimart</span>
+               <span>Muhamaddiyah Minimart</span>
              </h1>
              <img
                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQUovaIrSP9QWrJWNI_ZmR6A7BazFYG6bAP7w&s"

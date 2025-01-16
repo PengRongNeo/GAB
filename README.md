@@ -1,11 +1,11 @@
 # GAB X Muhammadiyah Welfare Home
 
 # 1. Introduction 
-# The Minimart and Voucher System for Muhammadiyah Welfare Home (MWH) is a web-based application designed to empower residents and streamline operational management. Built with the vision of fostering a nurturing and efficient environment, this system provides an intuitive platform for residents to request products, earn and manage vouchers, and track their transactions, while equipping administrators with powerful tools for user, inventory, and voucher management.
-# Purpose and Objectives
-# This system addresses the unique needs of MWH, a home dedicated to supporting boys on its campus by fostering their growth and well-being. By leveraging technology, the system aims to:
-# Empower Residents (Users): Provide an easy-to-use platform to request products, manage vouchers, and track account activity.
-# Streamline Administrative Operations: Enable staff to efficiently manage user accounts, voucher approvals, and inventory while maintaining detailed reporting for accountability.
+The Minimart and Voucher System for Muhammadiyah Welfare Home (MWH) is a web-based application designed to empower residents and streamline operational management. Built with the vision of fostering a nurturing and efficient environment, this system provides an intuitive platform for residents to request products, earn and manage vouchers, and track their transactions, while equipping administrators with powerful tools for user, inventory, and voucher management.
+Purpose and Objectives
+This system addresses the unique needs of MWH, a home dedicated to supporting boys on its campus by fostering their growth and well-being. By leveraging technology, the system aims to:
+Empower Residents (Users): Provide an easy-to-use platform to request products, manage vouchers, and track account activity.
+Streamline Administrative Operations: Enable staff to efficiently manage user accounts, voucher approvals, and inventory while maintaining detailed reporting for accountability.
 # 2. Installation
 Prerequisites
 - Node.js version [10.8.2]
@@ -28,10 +28,10 @@ Set Up Firebase
 
 Start the application
 	npm start
-3. Usage
+# 3. Usage
 Option 1: Run the application remotely on local Server
 Option 2: Follow Link to Deployed App, https://muhamaddiyah-minimart.netlify.app/ 
-3. Features
+# 4. Features
 For Users:
 Feature 1:
 User Friendly Dashboard showing voucher balances, transaction history, and available products
@@ -91,16 +91,15 @@ Auction
 Enable periodic auctions where residents can bid for special items using voucher points.
 Admin will be able to put up special items for bidding for one week
 
-4. Contributors
+# 5. Contributors
 Joshua Chen Jia Hao
 https://github.com/Nam3less-0 
 
 Neo Peng Rong
-
+https://github.com/PengRongNeo
 
 Santtosh Mohan
-
-
+https://github.com/santtoshh
 
 Ong Song Yang Ethan
 https://github.com/ethan267ong

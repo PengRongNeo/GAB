@@ -68,44 +68,69 @@ function Product() {
       setError(`Only ${product.qty} ${product.name}(s) are available in stock!`);
       return;
     }
-
-    setCart((prevCart) => {
-      const existingItemIndex = prevCart.findIndex((item) => item.id === product.id);
-      if (existingItemIndex > -1) {
-        const updatedCart = [...prevCart];
-        updatedCart[existingItemIndex].cartQty += quantity;
-        return updatedCart;
-      }
-      return [...prevCart, { ...product, cartQty: quantity }];
-    });
-
+  
     setError('');
-
-    // Retrieve the current user's ID (uid)
-    const userId = auth.currentUser?.uid;  // Get user ID
-
-    if (!userId) {
-      console.error('User not authenticated');
-      return;  // Stop execution if the user is not authenticated
-    }
-
-    const userRef = doc(db, 'users', userId);
-    const userDoc = await getDoc(userRef);
-
-    if (userDoc.exists()) {
-      // If the document exists, update it
-      await updateDoc(userRef, {
-        cart: [...cart, { ...product, cartQty: quantity }],
+  
+    try {
+      const userId = auth.currentUser?.uid; // Get user ID
+      if (!userId) {
+        console.error('User not authenticated');
+        return;
+      }
+  
+      const userRef = doc(db, 'users', userId);
+      const productRef = doc(db, 'products', product.id); // Reference to the product in Firestore
+  
+      // Fetch the current product data from Firestore to ensure up-to-date information
+      const productSnapshot = await getDoc(productRef);
+      if (!productSnapshot.exists()) {
+        setError('Product does not exist.');
+        return;
+      }
+  
+      const productData = productSnapshot.data();
+      if (productData.qty < quantity) {
+        setError(`Only ${productData.qty} ${product.name}(s) are available in stock!`);
+        return;
+      }
+  
+      // Update the product's remaining quantity in Firestore
+      await updateDoc(productRef, {
+        qty: productData.qty - quantity,
       });
-    } else {
-      // If the document doesn't exist, create it
-      await setDoc(userRef, {
-        cart: [{ ...product, cartQty: quantity }],
-      });
+  
+      // Fetch user's cart from Firestore
+      const userDoc = await getDoc(userRef);
+      let updatedCart = [];
+      if (userDoc.exists()) {
+        const existingCart = userDoc.data().cart || [];
+        const existingItemIndex = existingCart.findIndex((item) => item.id === product.id);
+        if (existingItemIndex > -1) {
+          // If the product already exists in the cart, update its quantity
+          updatedCart = [...existingCart];
+          updatedCart[existingItemIndex].cartQty += quantity;
+        } else {
+          // Otherwise, add the product to the cart
+          updatedCart = [...existingCart, { ...product, cartQty: quantity }];
+        }
+      } else {
+        // If the user document doesn't exist, create it with the new cart
+        updatedCart = [{ ...product, cartQty: quantity }];
+      }
+  
+      // Update the user's cart in Firestore
+      await updateDoc(userRef, { cart: updatedCart });
+  
+      // Update the cart state in the app
+      setCart(updatedCart);
+  
+      scrollToTop();
+    } catch (error) {
+      console.error('Error adding item to cart:', error);
+      setError('Failed to add item to cart. Please try again.');
     }
-
-    scrollToTop();
   };
+  
 
   const handleUpdateCartItem = (productId, quantity) => {
     setCart((prevCart) =>

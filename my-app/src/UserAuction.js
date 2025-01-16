@@ -81,11 +81,6 @@ function UserAuction() {
           currPrice: newBidPrice, // Update current price
         });
   
-        // Optionally, update the user's wallet balance
-        await updateDoc(doc(db, 'users', auth.currentUser.uid), {
-          wallet: user.wallet - newBidPrice,
-        });
-  
         // Update the userBid state for the item, clearing the input value
         setUserBid((prevState) => ({
           ...prevState,

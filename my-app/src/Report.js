@@ -91,7 +91,7 @@ function Report() {
         backgroundColor: 'rgba(75, 192, 192, 0.6)',
         borderColor: 'rgba(75, 192, 192, 1)',
         borderWidth: 2,
-        fill: false, // No fill under the line
+        fill: true, // No fill under the line
         tension: 0.3, // Smooth curve for the line
       },
     ],
